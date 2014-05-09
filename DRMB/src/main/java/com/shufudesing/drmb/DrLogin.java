@@ -99,9 +99,7 @@ public class DrLogin extends Activity{
                     if (state == MyDDP.DDPSTATE.LoggedIn.ordinal()) {
                         // login complete, so we can close this login activity and go back
                         Log.i("Login", "login successful");
-
-                        Intent t = new Intent(context, HomeActivity.class);
-                        getApplicationContext().startActivity(t);
+                        finish();
                     }
                 }
             }
@@ -118,6 +116,15 @@ public class DrLogin extends Activity{
         if (MyDDP.getInstance().getState() == MyDDP.DDPSTATE.Closed) {
             Log.e("Connection Issue", "Error connecting to server...please try again");
             MyDDP.getInstance().connectIfNeeded();    // try reconnecting
+        }
+    }
+
+    //unregister the receiver when the app goes to the background
+    protected void onPause() {
+        super.onPause();
+        if (mReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+            mReceiver = null;
         }
     }
 
