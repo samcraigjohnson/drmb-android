@@ -1,4 +1,4 @@
-package com.shufudesing.drmb;
+package com.shufudesing.drmb.Drawables;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,12 +15,11 @@ public class TextDrawable extends Drawable{
 
     private String text;
     private final Paint paint;
-    private int x, y;
+    private int y;
 
-    public TextDrawable(String text, int x, int y){
+    public TextDrawable(String text, int y){
         this.text = text;
         this.paint = new Paint();
-        this.x = x;
         this.y = y;
 
         paint.setColor(Color.WHITE);
@@ -29,7 +28,8 @@ public class TextDrawable extends Drawable{
         paint.setFakeBoldText(true);
         //paint.setShadowLayer(6f, 0, 0, Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setTextAlign(Paint.Align.CENTER);
+
     }
 
     public void setTextSize(float size){
@@ -42,7 +42,7 @@ public class TextDrawable extends Drawable{
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawText(text,x,y,paint);
+        canvas.drawText(text,canvas.getWidth()/2,y,paint);
     }
 
     @Override

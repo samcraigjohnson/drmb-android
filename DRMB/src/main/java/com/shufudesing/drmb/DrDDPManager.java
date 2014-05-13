@@ -7,6 +7,7 @@ import android.util.Log;
 import com.keysolutions.ddpclient.DDPClient;
 import com.keysolutions.ddpclient.android.DDPBroadcastReceiver;
 import com.keysolutions.ddpclient.android.DDPStateSingleton;
+import com.shufudesing.drmb.Views.MainView;
 
 /**
  * Created by Sam on 5/8/2014.
@@ -42,19 +43,27 @@ public class DrDDPManager extends DDPBroadcastReceiver{
     protected void onSubscriptionUpdate(String changeType,
                                         String subscriptionName, String docId) {
 
-        Log.i("DDPReceiver", "Sub Changed: " + subscriptionName + ":"+changeType);
-        if (subscriptionName.equals("spending")) {
-            if(changeType == DDPClient.DdpMessageType.READY){
-                //TODO change this to left to spend not total spent
-                String newText = MyDDP.getInstance().getTotalSpent().toString();
-                mActivity.getBigCircle().setMoneyText(newText);
+        Log.i(TAG, "Sub Changed: " + subscriptionName + ":"+changeType);
+        if (subscriptionName.equals("spending") || subscriptionName.equals("expenses")) {
+            Log.v(TAG, "lvl1: " + changeType + " : " + DDPClient.DdpMessageType.CHANGED);
+            if(changeType.equals(DDPClient.DdpMessageType.READY) || changeType.equals(DDPClient.DdpMessageType.CHANGED)){
+                Log.v(TAG, "called");
+                MainView mv = mActivity.getBigCircle();
+                Double left = MyDDP.getInstance().getAmountLeft(DrUTILS.MONTH);
+                Double total = MyDDP.getInstance().getTotalBudget();
+                double percent = (total.doubleValue() - left.doubleValue()) / total.doubleValue();
+                Log.v(TAG, "percent spent: " + percent);
+
+                String newText = left.toString();
+                mv.setMoneyText(newText);
+                mv.setPercent(new Float(percent));
             }
             //updateExpenses();
         }
     }
     @Override
     protected void onLogin() {
-        Log.i("DDPReceiver", "Logged in");
+        Log.i(TAG, "Logged in");
 
         MyDDP mDDP = MyDDP.getInstance();
         mDDP.subscribe("userData", new Object[] {});
@@ -64,7 +73,7 @@ public class DrDDPManager extends DDPBroadcastReceiver{
     }
     @Override
     protected void onLogout() {
-        Log.i("DDPReceiver", "Logged out");
+        Log.i(TAG, "Logged out");
     }
 
     @Override

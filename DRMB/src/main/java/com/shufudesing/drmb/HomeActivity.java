@@ -1,28 +1,24 @@
 package com.shufudesing.drmb;
 
 import android.content.BroadcastReceiver;
-import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.LinearLayout;
 
-import com.keysolutions.ddpclient.android.DDPBroadcastReceiver;
-import com.keysolutions.ddpclient.android.DDPStateSingleton;
+import com.shufudesing.drmb.Views.CatsView;
+import com.shufudesing.drmb.Views.MainView;
 
 
 public class HomeActivity extends ActionBarActivity {
 
     private BroadcastReceiver mReceiver;
     private MainView bigCircle;
+    private CatsView catsView;
+    private LinearLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +27,14 @@ public class HomeActivity extends ActionBarActivity {
         MyDDP ddp = MyDDP.getInstance();
         Log.i("HomeActivity", "oncreate...");
 
+
+        setContentView(R.layout.activity_home);
+        layout = (LinearLayout) this.findViewById(R.id.linLayout);
         bigCircle = new MainView(this);
-        setContentView(bigCircle);
+        catsView = new CatsView(this);
+
+        //layout.addView(bigCircle);
+        layout.addView(catsView);
     }
 
     public MainView getBigCircle(){

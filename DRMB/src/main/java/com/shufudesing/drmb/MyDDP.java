@@ -3,16 +3,15 @@ package com.shufudesing.drmb;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.keysolutions.ddpclient.DDPClient;
 import com.keysolutions.ddpclient.DDPListener;
-import com.keysolutions.ddpclient.EmailAuth;
 import com.keysolutions.ddpclient.TokenAuth;
 import com.keysolutions.ddpclient.UsernameAuth;
 import com.keysolutions.ddpclient.android.DDPStateSingleton;
+import com.shufudesing.drmb.Collections.Budget;
+import com.shufudesing.drmb.Collections.Expense;
 
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,6 +25,7 @@ public class MyDDP extends DDPStateSingleton {
     private static final String TAG = "DDP";
 
     private Map<String, Expense> mExpenses;
+    private Budget mBudget;
 
     protected MyDDP(Context context) {
         super(context);
@@ -58,6 +58,20 @@ public class MyDDP extends DDPStateSingleton {
         return new Double(total);
     }
 
+    public Double getAmountLeft(String dateType){
+        double left = 0;
+        if(dateType.equals(DrUTILS.MONTH)){
+            left = mBudget.getTotal().doubleValue() - getTotalSpent().doubleValue()
+                    - mBudget.getSave().doubleValue();
+        }
+
+        return new Double(left);
+    }
+
+    public Double getTotalBudget(){
+        return mBudget.getTotal();
+    }
+
     @Override
     public void broadcastSubscriptionChanged(String collectionName,
                                              String changetype, String docId) {
@@ -69,8 +83,17 @@ public class MyDDP extends DDPStateSingleton {
                 mExpenses.put(docId, new Expense(docId, (Map<String, Object>) getCollection(collectionName).get(docId)));
             } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
                 mExpenses.remove(docId);
-            } else if (changetype.equals(DDPClient.DdpMessageType.UPDATED)) {
-                //mExpenses.get(docId).updateFields();
+            } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
+                mExpenses.get(docId).updateFields((Map<String, Object>) getCollection(collectionName).get(docId));
+            }
+        }
+        else if(collectionName.equals("budgets")){
+            if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
+                mBudget = new Budget(docId, (Map<String, Object>) getCollection(collectionName).get(docId));
+            } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
+                mBudget = null;
+            } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
+                mBudget.updateFields((Map<String, Object>) getCollection(collectionName).get(docId));
             }
         }
         // do the broadcast after we've taken care of our parties wrapper
