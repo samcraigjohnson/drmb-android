@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -20,33 +21,34 @@ public class MainView extends View{
     private TextDrawable infoText, moneyText, timeText;
     private ArcDrawable arcDrawable;
 
-    public MainView(Context context) {
-        super(context);
+    public MainView(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
         DisplayMetrics screen = context.getResources().getDisplayMetrics();
 
-        int circle_size = 500;
+        int circle_size = 400;
         int width = circle_size;
         int height = circle_size;
 
+        int gcSize = 20;
         int x = (screen.widthPixels/2) - (width/2);
-        int y = (screen.heightPixels/2) - height;
+        int y = gcSize;
 
         mDrawable = new ShapeDrawable(new OvalShape());
         mDrawable.getPaint().setColor(DrUTILS.BLUE);
         mDrawable.setBounds(x, y, x + width, y + height);
 
-        int gcSize = 20;
+
         greenCircle = new ShapeDrawable(new OvalShape());
         greenCircle.getPaint().setColor(DrUTILS.GREEN);
         greenCircle.setBounds(x-gcSize, y-gcSize, x + width+gcSize, y + height+gcSize);
 
         infoText = new TextDrawable("LEFT TO SPEND", y+(height/2)+25);
-        infoText.setTextSize(50f);
+        infoText.setTextSize(45f);
         timeText = new TextDrawable("THIS MONTH", y+(height/2)+80);
-        timeText.setTextSize(50f);
+        timeText.setTextSize(45f);
         moneyText = new TextDrawable("$0", y+(height/3));
-        moneyText.setTextSize(90f);
+        moneyText.setTextSize(80f);
 
         arcDrawable = new ArcDrawable(x-gcSize, y-gcSize, x+width+gcSize, y+height+gcSize);
     }

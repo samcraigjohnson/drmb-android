@@ -1,11 +1,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.shufudesing.drmb"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:animateLayoutChanges="true" >
+
+    <com.shufudesing.drmb.Views.AddSaveView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".5" >
+
+
+    </com.shufudesing.drmb.Views.AddSaveView>
+
+    <com.shufudesing.drmb.Views.MainView
+        android:id="@+id/mainView"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="2"/>
+
+    <com.shufudesing.drmb.Views.CatsView
+        android:id="@+id/catsView"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 
 </LinearLayout>

@@ -7,7 +7,11 @@ import android.util.Log;
 import com.keysolutions.ddpclient.DDPClient;
 import com.keysolutions.ddpclient.android.DDPBroadcastReceiver;
 import com.keysolutions.ddpclient.android.DDPStateSingleton;
+import com.shufudesing.drmb.Collections.Category;
+import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
+
+import java.util.Map;
 
 /**
  * Created by Sam on 5/8/2014.
@@ -45,10 +49,10 @@ public class DrDDPManager extends DDPBroadcastReceiver{
 
         Log.i(TAG, "Sub Changed: " + subscriptionName + ":"+changeType);
         if (subscriptionName.equals("spending") || subscriptionName.equals("expenses")) {
-            Log.v(TAG, "lvl1: " + changeType + " : " + DDPClient.DdpMessageType.CHANGED);
             if(changeType.equals(DDPClient.DdpMessageType.READY) || changeType.equals(DDPClient.DdpMessageType.CHANGED)){
                 Log.v(TAG, "called");
                 MainView mv = mActivity.getBigCircle();
+                CatsView cv = mActivity.getCatsView();
                 Double left = MyDDP.getInstance().getAmountLeft(DrUTILS.MONTH);
                 Double total = MyDDP.getInstance().getTotalBudget();
                 double percent = (total.doubleValue() - left.doubleValue()) / total.doubleValue();
@@ -57,6 +61,11 @@ public class DrDDPManager extends DDPBroadcastReceiver{
                 String newText = left.toString();
                 mv.setMoneyText(newText);
                 mv.setPercent(new Float(percent));
+
+                Map<String, Category> cats = MyDDP.getInstance().getCategories();
+                for(Map.Entry<String, Category> cat: cats.entrySet()){
+                    cv.setHeight(cat.getKey(), cat.getValue().getPercentSpent());
+                }
             }
             //updateExpenses();
         }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.shufudesing.drmb.Collections.MeteorCollection;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -13,15 +14,32 @@ import java.util.Map;
  */
 public class Expense extends MeteorCollection {
 
+    private List<Transaction> transactions;
+    private static final String TAG = "Expense";
+
     public Expense(String docId, Map<String, Object> fields){
         super(docId, fields);
+        updateTransactions();
     }
 
-    //returns the amount of the expense
-    public List<Map<String, Object>> getSpendingList(){
-        Log.i("EXPENSE", "Fields: " + mFields);
+    public void updateFields(Map<String, Object> newFields){
+        super.updateFields(newFields);
+        updateTransactions();
+    }
 
-        return (List<Map<String,Object>>) mFields.get("spending");
+    private void updateTransactions(){
+        transactions = new ArrayList<Transaction>();
+        //TODO parse dates
+        for(Map<String,Object> trans: (List<Map<String,Object>>) mFields.get("spending")){
+            Log.v("Expense", trans.get("cat")+":"+trans.get("amount")+":"+trans.get("description")+":");
+            Transaction t = new Transaction((String) trans.get("cat"), Double.parseDouble((String) trans.get("amount")),
+                    (String) trans.get("description"), 0);
+            transactions.add(t);
+        }
+    }
+    //returns the amount of the expense
+    public List<Transaction> getTransactions(){
+        return transactions;
     }
 
     //returns whether or not this is the active expense

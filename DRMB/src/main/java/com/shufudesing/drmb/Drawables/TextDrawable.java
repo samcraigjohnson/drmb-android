@@ -15,12 +15,13 @@ public class TextDrawable extends Drawable{
 
     private String text;
     private final Paint paint;
-    private int y;
+    private int x,y;
 
     public TextDrawable(String text, int y){
         this.text = text;
         this.paint = new Paint();
         this.y = y;
+        this.x = -1;
 
         paint.setColor(Color.WHITE);
         paint.setTextSize(24f);
@@ -30,6 +31,20 @@ public class TextDrawable extends Drawable{
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.CENTER);
 
+    }
+
+    public TextDrawable(String text, int x, int y, int color){
+        this.text = text;
+        this.paint = new Paint();
+        this.y = y;
+        this.x = x;
+
+        paint.setColor(color);
+        paint.setTextSize(24f);
+        paint.setAntiAlias(true);
+        paint.setFakeBoldText(true);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextAlign(Paint.Align.LEFT);
     }
 
     public void setTextSize(float size){
@@ -42,8 +57,12 @@ public class TextDrawable extends Drawable{
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawText(text,canvas.getWidth()/2,y,paint);
+        if(x == -1)
+            canvas.drawText(text,canvas.getWidth()/2,y,paint);
+        else
+            canvas.drawText(text,x,y,paint);
     }
+
 
     @Override
     public void setAlpha(int i) {

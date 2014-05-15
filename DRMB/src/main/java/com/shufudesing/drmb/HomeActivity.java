@@ -30,16 +30,15 @@ public class HomeActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_home);
         layout = (LinearLayout) this.findViewById(R.id.linLayout);
-        bigCircle = new MainView(this);
-        catsView = new CatsView(this);
-
-        //layout.addView(bigCircle);
-        layout.addView(catsView);
+        bigCircle = (MainView) this.findViewById(R.id.mainView);
+        catsView = (CatsView) this.findViewById(R.id.catsView);
     }
 
     public MainView getBigCircle(){
         return bigCircle;
     }
+
+    public CatsView getCatsView() { return catsView; }
 
     @Override
     protected void onResume(){

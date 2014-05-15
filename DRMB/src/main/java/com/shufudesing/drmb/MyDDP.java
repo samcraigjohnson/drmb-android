@@ -1,6 +1,7 @@
 package com.shufudesing.drmb;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.util.Log;
 
 import com.keysolutions.ddpclient.DDPClient;
@@ -9,9 +10,14 @@ import com.keysolutions.ddpclient.TokenAuth;
 import com.keysolutions.ddpclient.UsernameAuth;
 import com.keysolutions.ddpclient.android.DDPStateSingleton;
 import com.shufudesing.drmb.Collections.Budget;
+import com.shufudesing.drmb.Collections.Category;
 import com.shufudesing.drmb.Collections.Expense;
+import com.shufudesing.drmb.Collections.Transaction;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.FormatFlagsConversionMismatchException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,7 +28,7 @@ public class MyDDP extends DDPStateSingleton {
 
     private static final String mDRMBServer = "192.168.1.7";
     private static final Integer mDRMBPort = 3000;
-    private static final String TAG = "DDP";
+    private static final String TAG = "MyDDP";
 
     private Map<String, Expense> mExpenses;
     private Budget mBudget;
@@ -47,15 +53,23 @@ public class MyDDP extends DDPStateSingleton {
     public Double getTotalSpent(){
         double total = 0;
         Log.i(TAG, "Getting total spent: " + mExpenses.toString());
-
+        clearCats();
         for(Expense e: mExpenses.values()){
             if(e.isActive().booleanValue()){
-                for(Map<String, Object> spendingMap: e.getSpendingList()){
-                    total += Double.parseDouble((String)spendingMap.get("amount"));
+                Log.v(TAG, "is active" + "num trans: " + e.getTransactions().size());
+                for(Transaction t: e.getTransactions()){
+                    Log.v(TAG, "amt:"+t.getAmount());
+                    total += t.getAmount();
+                    mBudget.getCats().get(t.getCatName()).addSpending(t.getAmount());
                 }
             }
         }
         return new Double(total);
+    }
+    private void clearCats(){
+        for(Category cat: mBudget.getCats().values()){
+            cat.setSpent(0d);
+        }
     }
 
     public Double getAmountLeft(String dateType){
@@ -66,6 +80,10 @@ public class MyDDP extends DDPStateSingleton {
         }
 
         return new Double(left);
+    }
+
+    public Map<String, Category> getCategories(){
+        return mBudget.getCats();
     }
 
     public Double getTotalBudget(){
