@@ -1,14 +1,19 @@
-package com.shufudesing.drmb;
+package com.shufudesing.drmb.Activities;
 
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.shufudesing.drmb.DrDDPManager;
+import com.shufudesing.drmb.MyDDP;
+import com.shufudesing.drmb.R;
 import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
 
@@ -20,12 +25,14 @@ public class HomeActivity extends ActionBarActivity {
     private CatsView catsView;
     private LinearLayout layout;
 
+    private final String TAG = "Home Activity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         MyDDP ddp = MyDDP.getInstance();
-        Log.i("HomeActivity", "oncreate...");
+        Log.i(TAG, "oncreate...");
 
 
         setContentView(R.layout.activity_home);
@@ -62,8 +69,9 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -72,9 +80,13 @@ public class HomeActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_add) {
+            Log.v(TAG,  "adding transaction pressed");
+            Intent intent = new Intent(this, AddTransactionActivity.class);
+            startActivity(intent);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

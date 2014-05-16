@@ -6,26 +6,34 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
         android:name="DrApplication">
 
         <activity
-            android:name="com.shufudesing.drmb.HomeActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:name=".Activities.HomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.AddTransactionActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:label="Add Transaction" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.HomeActivity" />
+         </activity>
         <activity
             android:name="com.shufudesing.drmb.DrLogin"
             android:label="@string/title_activity_dr_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity" />
+                android:value=".Activities.HomeActivity" />
         </activity>
     </application>
+
     <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="19" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- To auto-complete the email text field in the login form with the user's emails -->

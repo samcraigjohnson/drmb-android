@@ -7,6 +7,7 @@ import android.util.Log;
 import com.keysolutions.ddpclient.DDPClient;
 import com.keysolutions.ddpclient.android.DDPBroadcastReceiver;
 import com.keysolutions.ddpclient.android.DDPStateSingleton;
+import com.shufudesing.drmb.Activities.HomeActivity;
 import com.shufudesing.drmb.Collections.Category;
 import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
