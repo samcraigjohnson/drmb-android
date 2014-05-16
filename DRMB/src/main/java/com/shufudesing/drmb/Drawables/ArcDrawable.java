@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
@@ -19,10 +20,10 @@ public class ArcDrawable extends Drawable {
     private final Paint paint;
     private RectF oval;
 
-    public ArcDrawable(int left, int top, int right, int bottom){
+    public ArcDrawable(Rect r){
         this.paint = new Paint();
 
-        oval = new RectF(left, top, right, bottom);
+        oval = new RectF(r);
         startAngle = -90f;
         sweepAngle = 90f;
 
