@@ -10,6 +10,7 @@ public class DrUTILS {
     public static final int RING_SIZE = 20;
     public static final float INFO_TEXT_SIZE = 45f;
     public static final float MONEY_TEXT_SIZE = 75f;
+    public static final float CAT_BTN_TEXT_SIZE = 30f;
     public static final int LINE_LENGTH = 30;
 
     public static final String MONTH = "MONTH";
@@ -26,4 +27,6 @@ public class DrUTILS {
     public static final int CAT_MAX_HEIGHT = 200;
     public static final String[] CAT_NAMES = {"Fun", "Food", "Utils", "Home", "Car"};
     public static final String[] CAT_DB_NAMES = {"fun", "food", "bills", "rent", "trans"};
+
+    public static final int CAT_BTN_HEIGHT = 45;
 }
