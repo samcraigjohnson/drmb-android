@@ -10,7 +10,7 @@ public class DrUTILS {
     public static final int RING_SIZE = 20;
     public static final float INFO_TEXT_SIZE = 45f;
     public static final float MONEY_TEXT_SIZE = 75f;
-    public static final float CAT_BTN_TEXT_SIZE = 30f;
+    public static final float CAT_BTN_TEXT_SIZE = 50f;
     public static final int LINE_LENGTH = 30;
 
     public static final String MONTH = "MONTH";
@@ -21,12 +21,14 @@ public class DrUTILS {
     public static final int GREEN = 0xff7f9a65;
     public static final int RED = 0xffcd5c5c;
     public static final int BLUE = 0xffc0d9d9;
+    public static final int GRAY = 0xff575757;
 
     //Category bar constants
     public static final int NUM_CATS = 5;
     public static final int CAT_MAX_HEIGHT = 200;
-    public static final String[] CAT_NAMES = {"Fun", "Food", "Utils", "Home", "Car"};
+    public static final String[] CAT_NAMES = {"Fun", "Food", "Bills", "Home", "Car"};
     public static final String[] CAT_DB_NAMES = {"fun", "food", "bills", "rent", "trans"};
 
-    public static final int CAT_BTN_HEIGHT = 45;
+    public static final int CAT_BTN_HEIGHT = 100;
+
 }

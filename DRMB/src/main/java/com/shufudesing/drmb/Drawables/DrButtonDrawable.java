@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.shufudesing.drmb.DrUTILS;
 
@@ -18,6 +20,8 @@ public class DrButtonDrawable extends Drawable {
     private String text;
     private int x,y,width,height;
     private boolean selected;
+    private RectF rectfBound;
+    private final String TAG = "BUTTON DRAWABLE";
 
     public DrButtonDrawable(String text, boolean selected, int x, int y, int width, int height){
         this.text = text;
@@ -39,7 +43,9 @@ public class DrButtonDrawable extends Drawable {
         linePaint.setColor(Color.BLACK);
         linePaint.setAntiAlias(true);
         linePaint.setStyle(Paint.Style.STROKE);
+        rectfBound = new RectF(x,y,x+width,y+height);
     }
+
     public boolean isSelected(){
         return selected;
     }
@@ -53,13 +59,17 @@ public class DrButtonDrawable extends Drawable {
         if(selected)
             paint.setColor(DrUTILS.RED);
         else
-            paint.setColor(Color.GRAY);
+            paint.setColor(DrUTILS.GRAY);
+    }
+
+    public boolean contains(float x, float y){
+        return rectfBound.contains(x, y);
     }
 
     @Override
     public void draw(Canvas canvas) {
-
-        canvas.drawText(text, x+width/2, y+height/2, paint);
+        double texty = y+(height/2)+(DrUTILS.CAT_BTN_TEXT_SIZE/2);
+        canvas.drawText(text, x+width/2, (int)texty, paint);
         canvas.drawRect(x,y,x+width,y+height,linePaint);
     }
 

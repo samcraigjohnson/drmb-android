@@ -55,6 +55,10 @@ public class TextDrawable extends Drawable{
         this.text = text;
     }
 
+    public void setTextAlign(Paint.Align a){
+        paint.setTextAlign(a);
+    }
+
     @Override
     public void draw(Canvas canvas) {
         if(x == -1)
