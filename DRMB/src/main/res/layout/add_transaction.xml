@@ -5,23 +5,42 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.shufudesing.drmb.Views.TopButtonsTransactionView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
     <EditText
         android:id="@+id/amount"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:inputType="number"
-        android:hint="Amount"
-        android:layout_weight="2"/>
+        android:inputType="numberDecimal"
+        android:textSize="50dp"
+        android:hint="$"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:background="@drawable/edittext"
+        android:layout_weight="2"
+        />
+
+    <EditText
+        android:id="@+id/location"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:inputType="text"
+        android:layout_weight=".5"
+        android:hint="Location"
+        android:layout_marginBottom="5dp"/>
 
     <EditText
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:inputType="text"
-        android:layout_weight="2"
-        android:hint="(Optional) Description"/>
+        android:layout_weight=".5"
+        android:hint="Description"/>
 
     <com.shufudesing.drmb.Views.SpendCategoryView
+        android:id="@+id/categoryView"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="3"

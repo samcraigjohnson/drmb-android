@@ -2,6 +2,7 @@ package com.shufudesing.drmb.Views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -20,30 +21,9 @@ import java.util.List;
  */
 public class SpendCategoryView extends View implements View.OnTouchListener{
 
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
-
-        for(DrButtonDrawable cat: cats){
-            if(cat.contains(x,y)){
-                if(!cat.isSelected()){
-                    cat.setSelected(true);
-                    this.invalidate();
-                }
-                else
-                    break;
-            }
-            else if(cat.isSelected()){
-                cat.setSelected(false);
-            }
-        }
-
-        return true;
-    }
-
     private List<DrButtonDrawable> cats = new ArrayList<DrButtonDrawable>();
     private TextDrawable categoryText;
+    private DrButtonDrawable selected;
 
     public SpendCategoryView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -70,10 +50,17 @@ public class SpendCategoryView extends View implements View.OnTouchListener{
             cats.add(dbd);
         }
 
-        categoryText = new TextDrawable("Category", 0, (int)(DrUTILS.CAT_BTN_TEXT_SIZE * 1.9), DrUTILS.GRAY);
+        categoryText = new TextDrawable("CATEGORY", 0, (int)(DrUTILS.CAT_BTN_TEXT_SIZE * 1.9), Color.WHITE);
         categoryText.setTextSize(DrUTILS.CAT_BTN_TEXT_SIZE);
+        cats.get(0).setSelected(true);
+        selected = cats.get(0);
 
         this.setOnTouchListener(this);
+    }
+
+    public String getSelectedCategory(){
+        int indx = cats.indexOf(selected);
+        return DrUTILS.CAT_DB_NAMES[indx];
     }
 
     protected void onDraw(Canvas c){
@@ -81,5 +68,29 @@ public class SpendCategoryView extends View implements View.OnTouchListener{
         for(DrButtonDrawable db: cats){
             db.draw(c);
         }
+    }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+
+        for(DrButtonDrawable cat: cats){
+            if(cat.contains(x,y)){
+                if(!cat.isSelected()){
+                    cat.setSelected(true);
+                    selected = cat;
+                    this.invalidate();
+                }
+                else
+                    break;
+            }
+            else if(cat.isSelected()){
+                cat.setSelected(false);
+            }
+        }
+
+        return true;
     }
 }

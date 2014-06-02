@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.shufudesing.drmb.Activities.HomeActivity" >
 
-    <item android:id="@+id/action_add"
-        android:icon="@drawable/"
+    <item android:id="@+id/submit_transaction"
         android:title="Submit Transaction"
+        android:icon="@drawable/btn_check_buttonless_on"
         app:showAsAction="ifRoom|withText" />
 </menu>

@@ -43,7 +43,7 @@ public class DateDrawable extends Drawable{
 
         updateTime(time);
 
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(5f);
         paint.setAntiAlias(true);
@@ -51,7 +51,7 @@ public class DateDrawable extends Drawable{
         paint.setStrokeCap(Paint.Cap.SQUARE);
         paint.setPathEffect(new CornerPathEffect(10));
 
-        textPaint.setColor(Color.BLACK);
+        textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setAntiAlias(true);
         textPaint.setTextAlign(Paint.Align.LEFT);
@@ -92,18 +92,22 @@ public class DateDrawable extends Drawable{
         if(angle < 0){
             tx = (int) oval.right;
             ty = (int) oval.top;
+            textPaint.setTextAlign(Paint.Align.LEFT);
         }
         else if(angle < 90){
             tx = (int) oval.right;
             ty = (int) oval.bottom;
+            textPaint.setTextAlign(Paint.Align.LEFT);
         }
         else if(angle < 180){
             tx = (int) oval.left;
             ty = (int) oval.bottom;
+            textPaint.setTextAlign(Paint.Align.RIGHT);
         }
         else {
             tx = (int) oval.left;
             ty = (int) oval.top;
+            textPaint.setTextAlign(Paint.Align.CENTER);
         }
     }
 

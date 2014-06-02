@@ -47,7 +47,7 @@ public class CatsView extends View {
             Log.v(TAG, "Bounding rect: " + newD.getBounds().toString());
             bars.put(DrUTILS.CAT_DB_NAMES[inx], newD);
 
-            TextDrawable catName = new TextDrawable(DrUTILS.CAT_NAMES[inx], currX+padding + 5, DrUTILS.CAT_MAX_HEIGHT + 30, Color.BLACK);
+            TextDrawable catName = new TextDrawable(DrUTILS.CAT_NAMES[inx], currX+padding + 5, DrUTILS.CAT_MAX_HEIGHT + 30, Color.WHITE);
             catNames.add(catName);
             currX += (width + padding);
         }

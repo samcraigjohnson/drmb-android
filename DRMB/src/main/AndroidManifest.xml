@@ -9,7 +9,7 @@
         android:name="DrApplication">
 
         <activity
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@style/Theme.AppCompat"
             android:name=".Activities.HomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
@@ -18,13 +18,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.AddTransactionActivity"
-            android:theme="@style/Theme.AppCompat.Light"
+            android:theme="@style/Theme.AppCompat"
             android:label="Add Transaction" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity" />
          </activity>
         <activity
+            android:theme="@style/Theme.AppCompat"
             android:name="com.shufudesing.drmb.DrLogin"
             android:label="@string/title_activity_dr_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >

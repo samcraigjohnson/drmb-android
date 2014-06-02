@@ -35,7 +35,7 @@ public class MainView extends View{
         int height = DrUTILS.CIRCLE_SIZE;
 
         int gcSize = DrUTILS.RING_SIZE;
-        int y = gcSize + 20;
+        int y = gcSize + 40;
         int x = (screen.widthPixels/2) - (width/2);
 
 

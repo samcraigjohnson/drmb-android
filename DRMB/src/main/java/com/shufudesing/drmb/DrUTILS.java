@@ -21,14 +21,16 @@ public class DrUTILS {
     public static final int GREEN = 0xff7f9a65;
     public static final int RED = 0xffcd5c5c;
     public static final int BLUE = 0xffc0d9d9;
-    public static final int GRAY = 0xff575757;
+    public static final int GRAY = 0xffe5e5e5;
 
     //Category bar constants
     public static final int NUM_CATS = 5;
     public static final int CAT_MAX_HEIGHT = 200;
-    public static final String[] CAT_NAMES = {"Fun", "Food", "Bills", "Home", "Car"};
+    public static final String[] CAT_NAMES = {"FUN", "FOOD", "BILLS", "HOME", "CAR"};
     public static final String[] CAT_DB_NAMES = {"fun", "food", "bills", "rent", "trans"};
 
     public static final int CAT_BTN_HEIGHT = 100;
+
+
 
 }
