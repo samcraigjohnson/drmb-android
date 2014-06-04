@@ -5,4 +5,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="NavDrawerItemSelected" parent="AppTheme">
+        <item name="android:activatedBackgroundIndicator">@drawable/activated_background</item>
+    </style>
+
 </resources>

@@ -10,5 +10,4 @@
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
     android:textAppearance="@style/TextAppearance.AppCompat.Base.CompactMenu.Dialog"
-    android:textColor="#FFFFFF"
-    android:background="@drawable/activated_background"/>
+    android:textColor="#11DD22" />

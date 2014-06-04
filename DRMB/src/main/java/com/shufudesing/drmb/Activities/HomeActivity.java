@@ -66,6 +66,7 @@ public class HomeActivity extends ActionBarActivity {
 
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, DrUTILS.DRAWER_ITEMS));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener(this));
+        mDrawerList.setItemChecked(0, true);
 
         mToggle = new ActionBarDrawerToggle(this, mDrawer, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close){
             public void onDrawerClosed(View view){
