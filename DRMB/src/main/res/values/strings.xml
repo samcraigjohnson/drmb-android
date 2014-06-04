@@ -4,5 +4,7 @@
     <string name="app_name">Dr. MB</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="drawer_open"></string>
+    <string name="drawer_close">Dr. MB</string>
 
 </resources>

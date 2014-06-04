@@ -1,24 +1,40 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res/com.shufudesing.drmb"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linLayout"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:animateLayoutChanges="true" >
+    android:layout_height="match_parent">
+    <!-- Main content view -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:custom="http://schemas.android.com/apk/res/com.shufudesing.drmb"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/linLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:animateLayoutChanges="true" >
 
-    <com.shufudesing.drmb.Views.MainView
-        android:id="@+id/mainView"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="3"/>
+        <com.shufudesing.drmb.Views.MainView
+            android:id="@+id/mainView"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"/>
 
-    <com.shufudesing.drmb.Views.CatsView
-        android:id="@+id/catsView"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"/>
+        <com.shufudesing.drmb.Views.CatsView
+            android:id="@+id/catsView"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"/>
+    </LinearLayout>
 
+    <!-- The navigation drawer -->
+    <ListView android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/white"
+        android:dividerHeight="0dp"
+        android:background="#111"/>
 
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>

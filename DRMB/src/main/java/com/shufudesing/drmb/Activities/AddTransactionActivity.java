@@ -16,6 +16,7 @@ import com.shufudesing.drmb.MyDDP;
 import com.shufudesing.drmb.R;
 import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
+import com.shufudesing.drmb.Views.PriceInputView;
 import com.shufudesing.drmb.Views.SpendCategoryView;
 
 /**
@@ -26,12 +27,13 @@ public class AddTransactionActivity  extends ActionBarActivity{
     private final String TAG = "Add Transaction";
     private EditText amount,location,description;
     private SpendCategoryView categoryView;
+    private PriceInputView pView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_transaction);
-        amount = (EditText) this.findViewById(R.id.amount);
+        pView = (PriceInputView) this.findViewById(R.id.priceView);
         location = (EditText) this.findViewById(R.id.location);
         description = (EditText) this.findViewById(R.id.description);
         categoryView = (SpendCategoryView) this.findViewById(R.id.categoryView);
@@ -57,7 +59,7 @@ public class AddTransactionActivity  extends ActionBarActivity{
     }
 
     private void submitExpense(){
-        double amountVal = Double.parseDouble(amount.getText().toString());
+        double amountVal = pView.getAmount();
         String descripVal = description.getText().toString();
         String locationVal = location.getText().toString();
         String category = categoryView.getSelectedCategory();

@@ -16,6 +16,7 @@ import com.shufudesing.drmb.Collections.Transaction;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.FormatFlagsConversionMismatchException;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MyDDP extends DDPStateSingleton {
 
-    private static final String mDRMBServer = "192.168.1.7";
+    private static final String mDRMBServer = "192.168.1.2";
     private static final Integer mDRMBPort = 3000;
     private static final String TAG = "MyDDP";
 
@@ -88,6 +89,18 @@ public class MyDDP extends DDPStateSingleton {
 
     public Double getTotalBudget(){
         return mBudget.getTotal();
+    }
+
+    public Double getDailyBudget(){
+        Calendar c = Calendar.getInstance();
+        int numDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+        return getTotalBudget() / numDays;
+    }
+
+    public Double getWeeklyBudget(){
+        Calendar c = Calendar.getInstance();
+        int numWeeks = c.getActualMaximum(Calendar.WEEK_OF_MONTH);
+        return getTotalBudget() / numWeeks;
     }
 
     @Override

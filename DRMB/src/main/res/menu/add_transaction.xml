@@ -5,6 +5,6 @@
 
     <item android:id="@+id/submit_transaction"
         android:title="Submit Transaction"
-        android:icon="@drawable/btn_check_buttonless_on"
-        app:showAsAction="ifRoom|withText" />
+        android:icon="@drawable/ic_action_accept"
+        app:showAsAction="always" />
 </menu>

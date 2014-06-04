@@ -4,7 +4,7 @@
     tools:context="com.shufudesing.drmb.Activities.HomeActivity" >
 
     <item android:id="@+id/action_add"
-        android:icon="@drawable/ic_input_add"
-        android:title=" Add Expense"
-        app:showAsAction="ifRoom|withText" />
+        android:icon="@drawable/ic_action_new"
+        android:title="Add Expense"
+        app:showAsAction="always" />
 </menu>

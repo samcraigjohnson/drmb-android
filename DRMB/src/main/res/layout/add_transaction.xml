@@ -9,8 +9,9 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-    <EditText
-        android:id="@+id/amount"
+
+    <com.shufudesing.drmb.Views.PriceInputView
+        android:id="@+id/priceView"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:inputType="numberDecimal"
