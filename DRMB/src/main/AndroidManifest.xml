@@ -3,31 +3,32 @@
     package="com.shufudesing.drmb" >
 
     <application
+        android:name="com.shufudesing.drmb.DrApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label=""
-        android:name="DrApplication">
-
+        android:label="Dr. MB" >
         <activity
-            android:theme="@style/Theme.AppCompat"
-            android:name=".Activities.HomeActivity"
-            android:label="" >
+            android:name="com.shufudesing.drmb.Activities.HomeActivity"
+            android:label=""
+            android:theme="@style/Theme.AppCompat" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.AddTransactionActivity"
-            android:theme="@style/Theme.AppCompat"
-            android:label="Add Transaction" >
+        <activity
+            android:name="com.shufudesing.drmb.Activities.AddTransactionActivity"
+            android:label="Add Transaction"
+            android:theme="@style/Theme.AppCompat" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.HomeActivity" />
-         </activity>
+        </activity>
         <activity
-            android:theme="@style/Theme.AppCompat"
-            android:name="com.shufudesing.drmb.DrLogin"
+            android:name=".Activities.DrLogin"
             android:label="@string/title_activity_dr_login"
+            android:theme="@style/Theme.AppCompat"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -35,7 +36,10 @@
         </activity>
     </application>
 
-    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="19" />
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="19" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />

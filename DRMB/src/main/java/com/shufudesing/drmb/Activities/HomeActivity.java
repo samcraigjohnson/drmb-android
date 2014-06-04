@@ -1,5 +1,8 @@
 package com.shufudesing.drmb.Activities;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -14,12 +17,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.shufudesing.drmb.DrDDPManager;
 import com.shufudesing.drmb.DrUTILS;
-import com.shufudesing.drmb.DrawerItemClickListener;
+import com.shufudesing.drmb.Fragments.HistoryFragment;
+import com.shufudesing.drmb.Listeners.DrawerItemClickListener;
+import com.shufudesing.drmb.Fragments.OverallViewFragment;
 import com.shufudesing.drmb.MyDDP;
 import com.shufudesing.drmb.R;
 import com.shufudesing.drmb.Views.CatsView;
@@ -32,11 +36,10 @@ public class HomeActivity extends ActionBarActivity {
     private BroadcastReceiver mReceiver;
     private MainView bigCircle;
     private CatsView catsView;
-    private LinearLayout layout;
     private DrawerLayout mDrawer;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mToggle;
-
+    private Fragment mainFragment;
     private final String TAG = "Home Activity";
 
     @Override
@@ -48,7 +51,13 @@ public class HomeActivity extends ActionBarActivity {
 
 
         setContentView(R.layout.activity_home);
-        layout = (LinearLayout) this.findViewById(R.id.linLayout);
+        mainFragment = new OverallViewFragment();
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, mainFragment)
+                    .commit();
+        }
+
         bigCircle = (MainView) this.findViewById(R.id.mainView);
         catsView = (CatsView) this.findViewById(R.id.catsView);
 
@@ -56,7 +65,7 @@ public class HomeActivity extends ActionBarActivity {
         mDrawerList = (ListView) this.findViewById(R.id.left_drawer);
 
         mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, DrUTILS.DRAWER_ITEMS));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener(this));
 
         mToggle = new ActionBarDrawerToggle(this, mDrawer, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close){
             public void onDrawerClosed(View view){
@@ -147,4 +156,48 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void selectItem(int pos){
+        Log.v(TAG, "pos: " + pos);
+        Fragment fragment = null;
+        String title = "";
+        FragmentManager fManager = getFragmentManager();
+
+        if(pos == DrUTILS.OVERVIEW){
+            fManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fManager.beginTransaction()
+                    .replace(R.id.container, mainFragment)
+                    .commit();
+        }
+        else {
+            if (pos == DrUTILS.HISTORY_POS) {
+                fragment = new HistoryFragment();
+                title = "History";
+            }
+            else if (pos == DrUTILS.SETTINGS) {}
+            else if (pos == DrUTILS.TIPS) {}
+            else if (pos == DrUTILS.OUTLOOK) {}
+            else if (pos == DrUTILS.SAVED_LOCATIONS) {}
+
+            String tag = fragment.getTag();
+            fManager.beginTransaction()
+                    .replace(R.id.container, fragment, tag)
+                    .addToBackStack(tag)
+                    .commit();
+        }
+
+        mDrawerList.setItemChecked(pos, true);
+        getActionBar().setTitle(title);
+        mDrawer.closeDrawer(mDrawerList);
+    }
+
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getFragmentManager();
+        if(fm.getBackStackEntryCount() > 0){
+            fm.popBackStack();
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
 }

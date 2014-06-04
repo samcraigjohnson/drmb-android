@@ -28,10 +28,15 @@ public class DrUTILS {
     public static final int CAT_MAX_HEIGHT = 200;
     public static final String[] CAT_NAMES = {"FUN", "FOOD", "BILLS", "HOME", "CAR"};
     public static final String[] CAT_DB_NAMES = {"fun", "food", "bills", "rent", "trans"};
-    public static final String[] DRAWER_ITEMS = {"SAVED LOCATIONS", "HISTORY", "OUTLOOK", "TIPS", "SETTINGS"};
+    public static final String[] DRAWER_ITEMS = {"OVERVIEW", "SAVED LOCATIONS", "HISTORY", "OUTLOOK", "TIPS", "SETTINGS"};
 
     public static final int CAT_BTN_HEIGHT = 100;
 
-
-
+    //Positions for drawer items
+    public static final int OVERVIEW = 0;
+    public static final int SAVED_LOCATIONS = 1;
+    public static final int HISTORY_POS = 2;
+    public static final int OUTLOOK = 2;
+    public static final int TIPS = 3;
+    public static final int SETTINGS = 4;
 }

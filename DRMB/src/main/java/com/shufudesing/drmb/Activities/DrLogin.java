@@ -1,4 +1,4 @@
-package com.shufudesing.drmb;
+package com.shufudesing.drmb.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -24,6 +24,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.shufudesing.drmb.MyDDP;
+import com.shufudesing.drmb.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
