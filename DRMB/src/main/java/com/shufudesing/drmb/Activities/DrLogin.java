@@ -83,9 +83,8 @@ public class DrLogin extends Activity{
      */
     protected void onResume() {
         super.onResume();
-        // get ready to handle DDP events
-        //MyDDP.initInstance(getApplicationContext());
 
+        // get ready to handle DDP events
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

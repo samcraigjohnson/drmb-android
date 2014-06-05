@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.shufudesing.drmb.Collections.MeteorCollection;
 
+
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +34,10 @@ public class Expense extends MeteorCollection {
         transactions = new ArrayList<Transaction>();
         //TODO parse dates
         for(Map<String,Object> trans: (List<Map<String,Object>>) mFields.get("spending")){
-            Log.v("Expense", trans.get("cat")+":"+trans.get("amount")+":"+trans.get("description")+":");
-            Transaction t = new Transaction((String) trans.get("cat"), Double.parseDouble((String) trans.get("amount")),
-                    (String) trans.get("description"), 0);
+            Log.v(TAG, trans.get("cat")+":"+trans.get("amount")+":"+trans.get("description")+":"+trans.get("dateString"));
+            DateTime date = new DateTime(trans.get("dateString").toString());
+            Transaction t = new Transaction((String) trans.get("cat"), Double.parseDouble(trans.get("amount").toString()),
+                    (String) trans.get("description"), date);
             transactions.add(t);
         }
     }

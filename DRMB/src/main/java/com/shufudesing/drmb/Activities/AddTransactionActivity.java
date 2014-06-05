@@ -1,6 +1,9 @@
 package com.shufudesing.drmb.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
@@ -28,6 +31,7 @@ public class AddTransactionActivity  extends ActionBarActivity{
     private EditText amount,location,description;
     private SpendCategoryView categoryView;
     private PriceInputView pView;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +43,47 @@ public class AddTransactionActivity  extends ActionBarActivity{
         categoryView = (SpendCategoryView) this.findViewById(R.id.categoryView);
     }
 
-
     @Override
     protected void onResume(){
         super.onResume();
+        // get ready to handle DDP events
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // display errors to the user
+                Log.v(TAG, "Received broadcast!!!");
+                Bundle bundle = intent.getExtras();
+                if (intent.getAction().equals(MyDDP.MESSAGE_ERROR)) {
+                    String message = bundle.getString(MyDDP.MESSAGE_EXTRA_MSG);
+                    Log.e(TAG, message);
+                } else if (intent.getAction().equals(MyDDP.MESSAGE_METHODRESUlT)) {
+                    String resultJson = bundle.getString(MyDDP.MESSAGE_EXTRA_RESULT);
+                    Log.v(TAG, resultJson);
+                    finish();
+                }
+            }
+        };
+        // we want error messages
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,
+                new IntentFilter(MyDDP.MESSAGE_METHODRESUlT));
+        // we want connection state change messages so we know we're logged in
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,
+                new IntentFilter(MyDDP.MESSAGE_ERROR));
+
+        // show connection error if it happened
+        if (MyDDP.getInstance().getState() == MyDDP.DDPSTATE.Closed) {
+            Log.e("Connection Issue", "Error connecting to server...please try again");
+            MyDDP.getInstance().connectIfNeeded();    // try reconnecting
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        if (mReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+            mReceiver = null;
+        }
     }
 
     @Override
@@ -64,9 +100,9 @@ public class AddTransactionActivity  extends ActionBarActivity{
         String locationVal = location.getText().toString();
         String category = categoryView.getSelectedCategory();
         Log.v(TAG, amountVal+":"+descripVal+":"+locationVal+":"+category);
-        MyDDP.getInstance();
-
+        MyDDP.getInstance().addExpense(amountVal, category, descripVal);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

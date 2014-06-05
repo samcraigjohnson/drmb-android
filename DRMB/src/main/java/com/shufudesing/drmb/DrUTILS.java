@@ -26,7 +26,7 @@ public class DrUTILS {
     //Category bar constants
     public static final int NUM_CATS = 5;
     public static final int CAT_MAX_HEIGHT = 200;
-    public static final String[] CAT_NAMES = {"FUN", "FOOD", "BILLS", "HOME", "CAR"};
+    public static final String[] CAT_NAMES = {"FUN", "FOOD", "BILLS", "HOME", "TRANSIT"};
     public static final String[] CAT_DB_NAMES = {"fun", "food", "bills", "rent", "trans"};
     public static final String[] DRAWER_ITEMS = {"OVERVIEW", "SAVED LOCATIONS", "HISTORY", "OUTLOOK", "TIPS", "SETTINGS"};
 

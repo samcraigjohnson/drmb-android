@@ -1,19 +1,35 @@
 package com.shufudesing.drmb.Collections;
 
+import android.util.Log;
+
+import org.joda.time.DateTime;
+
 /**
  * Created by Sam on 5/13/2014.
  */
-public class Transaction {
+public class Transaction implements Comparable<Transaction>{
+
+    private final String TAG = "Transaction";
+    @Override
+    public int compareTo(Transaction t) {
+        if(date.isBefore(t.getDate().toInstant())){
+            return -1;
+        }
+        else{
+            return 1;
+        }
+    }
 
     private String description, cat;
     private double amount;
-    private int date;
+    private DateTime date;
 
-    public Transaction(String catName, Double amount, String description, Integer date){
+    public Transaction(String catName, Double amount, String description, DateTime date){
         this.cat = catName;
         this.description = description;
         this.amount = amount.doubleValue();
-        this.date = date.intValue();
+        Log.v(TAG, "Date: " + date);
+        this.date = date;
 
     }
 
@@ -41,11 +57,11 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public int getDate() {
+    public DateTime getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(DateTime date) {
         this.date = date;
     }
 

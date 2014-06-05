@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.util.Log;
 
+import net.danlew.android.joda.ResourceZoneInfoProvider;
+
 /**
  * Created by Sam on 5/8/2014.
  */
@@ -32,6 +34,7 @@ public class DrApplication extends Application {
         // are bound to the application process.
         Log.i("Application", "initializing singletons...");
         initSingletons();
+        ResourceZoneInfoProvider.init(this);
     }
 
     @Override

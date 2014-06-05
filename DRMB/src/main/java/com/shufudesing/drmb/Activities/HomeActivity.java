@@ -177,7 +177,6 @@ public class HomeActivity extends ActionBarActivity {
             fManager.beginTransaction()
                     .replace(R.id.container, mainFragment, mainFragment.getTag())
                     .commit();
-            updateOverallFragment();
         }
         else{
             if (pos == DrUTILS.HISTORY_POS) {

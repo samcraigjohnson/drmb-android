@@ -1,7 +1,5 @@
 package com.shufudesing.drmb.Fragments;
 
-
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,38 +24,22 @@ import com.shufudesing.drmb.Views.MainView;
 import java.util.Map;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment that contains the main info circle, cats
+ * bar graph, and savings graph
  *
  */
-public class OverallViewFragment extends Fragment{
-
+public class OverallViewFragment extends BaseDrFragment{
     private CatsView catsView;
     private MainView circle;
     private final String TAG = "OverallViewFragment";
-    private boolean hasInfo = false;
 
-    public OverallViewFragment() {
-        // Required empty public constructor
-    }
-
-    public void onCreate(Bundle savedInstanceState){
-
-        super.onCreate(savedInstanceState);
-    }
-
-    public void onResume(){
-        super.onResume();
-
-    }
-
-    public void onPause(){
-        super.onPause();
-
-    }
-    public void setHasInfo(boolean b){
-        hasInfo = b;
-    }
-
+    public OverallViewFragment() { }
+    @Override
+    public void onCreate(Bundle savedInstanceState){super.onCreate(savedInstanceState);}
+    @Override
+    public void onResume(){ super.onResume();}
+    @Override
+    public void onPause(){ super.onPause();}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,12 +48,9 @@ public class OverallViewFragment extends Fragment{
         catsView = (CatsView) v.findViewById(R.id.catsView);
         circle =  (MainView) v.findViewById(R.id.mainView);
         Log.v(TAG, "VIEW INFLATED");
-        if(hasInfo){
-            updateInfo();
-        }
+        checkChange();
         return v;
     }
-
     public void updateInfo(){
         Double left = MyDDP.getInstance().getAmountLeft(DrUTILS.MONTH);
         Double total = MyDDP.getInstance().getTotalBudget();

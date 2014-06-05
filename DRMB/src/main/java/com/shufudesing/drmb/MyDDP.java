@@ -19,6 +19,7 @@ import com.shufudesing.drmb.Collections.Transaction;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.FormatFlagsConversionMismatchException;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,17 @@ public class MyDDP extends DDPStateSingleton {
         return (MyDDP) mInstance;
     }
 
+    public List<Transaction> getTransactions(){
+        List<Transaction> transactions = new ArrayList<Transaction>();
+        for(Expense e: mExpenses.values()){
+            for(Transaction t: e.getTransactions()){
+                transactions.add(t);
+            }
+        }
+        Collections.sort(transactions);
+        return transactions;
+    }
+
     public Double getTotalSpent(){
         double total = 0;
         Log.i(TAG, "Getting total spent: " + mExpenses.toString());
@@ -61,7 +73,7 @@ public class MyDDP extends DDPStateSingleton {
             if(e.isActive().booleanValue()){
                 Log.v(TAG, "is active" + "num trans: " + e.getTransactions().size());
                 for(Transaction t: e.getTransactions()){
-                    Log.v(TAG, "amt:"+t.getAmount());
+                    Log.v(TAG, "Transaction amount:"+t.getAmount());
                     total += t.getAmount();
                     mBudget.getCats().get(t.getCatName()).addSpending(t.getAmount());
                 }
@@ -99,7 +111,8 @@ public class MyDDP extends DDPStateSingleton {
             @Override
             @SuppressWarnings("unchecked")
             public void onResult(Map<String, Object> jsonFields){
-                 if(jsonFields.containsKey("result")){
+                Log.v(TAG, "Resulting json: " + jsonFields.toString());
+                 if(jsonFields.get("msg").equals("result")){
                      Map<String, Object> result = (Map<String, Object>) jsonFields
                              .get(DDPClient.DdpMessageField.RESULT);
                      Intent broadcastIntent = new Intent();
@@ -109,6 +122,7 @@ public class MyDDP extends DDPStateSingleton {
                      LocalBroadcastManager.getInstance(
                              DrApplication.getAppContext()).sendBroadcast(
                              broadcastIntent);
+                     Log.v(TAG, "sending intent");
                  }
                  else if(jsonFields.containsKey("error")){
                      Map<String, Object> error = (Map<String, Object>) jsonFields
@@ -144,6 +158,7 @@ public class MyDDP extends DDPStateSingleton {
         if (collectionName.equals("expenses")) {
             if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
                 mExpenses.put(docId, new Expense(docId, (Map<String, Object>) getCollection(collectionName).get(docId)));
+                Log.v(TAG, "Number of expenses: " + mExpenses.size());
             } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
                 mExpenses.remove(docId);
             } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
