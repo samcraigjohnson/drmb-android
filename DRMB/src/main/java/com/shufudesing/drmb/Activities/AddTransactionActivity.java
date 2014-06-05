@@ -64,6 +64,7 @@ public class AddTransactionActivity  extends ActionBarActivity{
         String locationVal = location.getText().toString();
         String category = categoryView.getSelectedCategory();
         Log.v(TAG, amountVal+":"+descripVal+":"+locationVal+":"+category);
+        MyDDP.getInstance();
 
     }
     @Override

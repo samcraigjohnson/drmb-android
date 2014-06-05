@@ -2,6 +2,8 @@ package com.shufudesing.drmb;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.keysolutions.ddpclient.DDPClient;
@@ -10,6 +12,7 @@ import com.keysolutions.ddpclient.android.DDPStateSingleton;
 import com.shufudesing.drmb.Activities.DrLogin;
 import com.shufudesing.drmb.Activities.HomeActivity;
 import com.shufudesing.drmb.Collections.Category;
+import com.shufudesing.drmb.Fragments.OverallViewFragment;
 import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
 
@@ -25,7 +28,9 @@ public class DrDDPManager extends DDPBroadcastReceiver{
 
     public DrDDPManager(MyDDP ddp, Activity activity) {
         super(ddp, activity);
-
+        /*manage the handling of method calls
+        LocalBroadcastManager.getInstance(activity).registerReceiver(this,
+                new IntentFilter(DDPStateSingleton.MESSAGE_METHODRESUlT));*/
         mActivity = (HomeActivity) activity;
     }
 
@@ -51,25 +56,9 @@ public class DrDDPManager extends DDPBroadcastReceiver{
 
         Log.i(TAG, "Sub Changed: " + subscriptionName + ":"+changeType);
         if (subscriptionName.equals("spending") || subscriptionName.equals("expenses")) {
-            if(changeType.equals(DDPClient.DdpMessageType.READY) || changeType.equals(DDPClient.DdpMessageType.CHANGED)){
-                Log.v(TAG, "called");
-                MainView mv = mActivity.getBigCircle();
-                CatsView cv = mActivity.getCatsView();
-                Double left = MyDDP.getInstance().getAmountLeft(DrUTILS.MONTH);
-                Double total = MyDDP.getInstance().getTotalBudget();
-                double percent = (total.doubleValue() - left.doubleValue()) / total.doubleValue();
-                Log.v(TAG, "percent spent: " + percent);
-
-                String newText = left.toString();
-                mv.setMoneyText(newText);
-                mv.setPercent(new Float(percent));
-
-                Map<String, Category> cats = MyDDP.getInstance().getCategories();
-                for(Map.Entry<String, Category> cat: cats.entrySet()){
-                    cv.setHeight(cat.getKey(), cat.getValue().getPercentSpent());
-                }
+            if(changeType.equals(DDPClient.DdpMessageType.READY) || changeType.equals(DDPClient.DdpMessageType.CHANGED)) {
+                mActivity.updateOverallFragment();
             }
-            //updateExpenses();
         }
     }
     @Override

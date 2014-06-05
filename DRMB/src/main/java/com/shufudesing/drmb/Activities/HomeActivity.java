@@ -39,7 +39,7 @@ public class HomeActivity extends ActionBarActivity {
     private DrawerLayout mDrawer;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mToggle;
-    private Fragment mainFragment;
+    private OverallViewFragment mainFragment;
     private final String TAG = "Home Activity";
 
     @Override
@@ -114,6 +114,10 @@ public class HomeActivity extends ActionBarActivity {
 
     public CatsView getCatsView() { return catsView; }
 
+    public Fragment getOverallFragment(){
+        return mainFragment;
+    }
+
     @Override
     protected void onResume(){
         super.onResume();
@@ -157,6 +161,11 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void updateOverallFragment(){
+        mainFragment.setHasInfo(true);
+        mainFragment.updateInfo();
+    }
+
     public void selectItem(int pos){
         Log.v(TAG, "pos: " + pos);
         Fragment fragment = null;
@@ -166,24 +175,25 @@ public class HomeActivity extends ActionBarActivity {
         if(pos == DrUTILS.OVERVIEW){
             fManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fManager.beginTransaction()
-                    .replace(R.id.container, mainFragment)
+                    .replace(R.id.container, mainFragment, mainFragment.getTag())
                     .commit();
+            updateOverallFragment();
         }
-        else {
+        else{
             if (pos == DrUTILS.HISTORY_POS) {
-                fragment = new HistoryFragment();
-                title = "History";
+                    fragment = new HistoryFragment();
+                    title = "History";
             }
             else if (pos == DrUTILS.SETTINGS) {}
-            else if (pos == DrUTILS.TIPS) {}
-            else if (pos == DrUTILS.OUTLOOK) {}
-            else if (pos == DrUTILS.SAVED_LOCATIONS) {}
+                else if (pos == DrUTILS.TIPS) {}
+                else if (pos == DrUTILS.OUTLOOK) {}
+                else if (pos == DrUTILS.SAVED_LOCATIONS) {}
 
-            String tag = fragment.getTag();
-            fManager.beginTransaction()
-                    .replace(R.id.container, fragment, tag)
-                    .addToBackStack(tag)
-                    .commit();
+                String tag = fragment.getTag();
+                fManager.beginTransaction()
+                        .replace(R.id.container, fragment, tag)
+                        .addToBackStack(tag)
+                        .commit();
         }
 
         mDrawerList.setItemChecked(pos, true);
@@ -195,7 +205,7 @@ public class HomeActivity extends ActionBarActivity {
     public void onBackPressed(){
         FragmentManager fm = getFragmentManager();
         if(fm.getBackStackEntryCount() > 0){
-            fm.popBackStack();
+            selectItem(DrUTILS.OVERVIEW);
         }
         else{
             super.onBackPressed();

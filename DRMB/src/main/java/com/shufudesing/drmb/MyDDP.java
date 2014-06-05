@@ -1,7 +1,9 @@
 package com.shufudesing.drmb;
 
 import android.content.Context;
+import android.content.Intent;
 import android.nfc.Tag;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.keysolutions.ddpclient.DDPClient;
@@ -65,6 +67,7 @@ public class MyDDP extends DDPStateSingleton {
                 }
             }
         }
+        Log.v(TAG, "total spent:" + total);
         return new Double(total);
     }
     private void clearCats(){
@@ -85,6 +88,35 @@ public class MyDDP extends DDPStateSingleton {
 
     public Map<String, Category> getCategories(){
         return mBudget.getCats();
+    }
+
+    public void addExpense(double amount, String cat, String description){
+        Object[] methodArgs = new Object[3];
+        methodArgs[0] = amount;
+        methodArgs[1] = cat;
+        methodArgs[2] = description;
+        mDDP.call("addExpense", methodArgs, new DDPListener(){
+            @Override
+            @SuppressWarnings("unchecked")
+            public void onResult(Map<String, Object> jsonFields){
+                 if(jsonFields.containsKey("result")){
+                     Map<String, Object> result = (Map<String, Object>) jsonFields
+                             .get(DDPClient.DdpMessageField.RESULT);
+                     Intent broadcastIntent = new Intent();
+                     broadcastIntent.setAction(MESSAGE_METHODRESUlT);
+                     broadcastIntent.putExtra(MESSAGE_EXTRA_RESULT,
+                             mGSON.toJson(result));
+                     LocalBroadcastManager.getInstance(
+                             DrApplication.getAppContext()).sendBroadcast(
+                             broadcastIntent);
+                 }
+                 else if(jsonFields.containsKey("error")){
+                     Map<String, Object> error = (Map<String, Object>) jsonFields
+                             .get(DDPClient.DdpMessageField.ERROR);
+                     broadcastDDPError((String) error.get("message"));
+                 }
+            }
+        });
     }
 
     public Double getTotalBudget(){
