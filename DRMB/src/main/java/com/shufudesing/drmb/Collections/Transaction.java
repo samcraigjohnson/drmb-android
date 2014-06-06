@@ -10,16 +10,6 @@ import org.joda.time.DateTime;
 public class Transaction implements Comparable<Transaction>{
 
     private final String TAG = "Transaction";
-    @Override
-    public int compareTo(Transaction t) {
-        if(date.isBefore(t.getDate().toInstant())){
-            return -1;
-        }
-        else{
-            return 1;
-        }
-    }
-
     private String description, cat;
     private double amount;
     private DateTime date;
@@ -31,6 +21,20 @@ public class Transaction implements Comparable<Transaction>{
         Log.v(TAG, "Date: " + date);
         this.date = date;
 
+    }
+    @Override
+    public int compareTo(Transaction t) {
+        if(date.isBefore(t.getDate().toInstant())){
+            return 1;
+        }
+        else{
+            return -1;
+        }
+    }
+
+    @Override
+    public String toString(){
+        return "$" + amount + ", " + description + ", " + cat + ", " + date.toString();
     }
 
     public String getCatName() {

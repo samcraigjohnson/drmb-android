@@ -57,7 +57,7 @@ public class DrDDPManager extends DDPBroadcastReceiver{
         Log.i(TAG, "Sub Changed: " + subscriptionName + ":"+changeType);
         if (subscriptionName.equals("spending") || subscriptionName.equals("expenses")) {
             if(changeType.equals(DDPClient.DdpMessageType.READY) || changeType.equals(DDPClient.DdpMessageType.CHANGED)) {
-                mActivity.updateOverallFragment();
+                mActivity.expensesUpdate();
             }
         }
     }

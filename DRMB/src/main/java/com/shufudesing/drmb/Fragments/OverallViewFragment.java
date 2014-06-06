@@ -1,26 +1,17 @@
 package com.shufudesing.drmb.Fragments;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.keysolutions.ddpclient.android.DDPBroadcastReceiver;
 import com.shufudesing.drmb.Collections.Category;
 import com.shufudesing.drmb.DrUTILS;
 import com.shufudesing.drmb.MyDDP;
 import com.shufudesing.drmb.R;
 import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
-
 import java.util.Map;
 
 /**
@@ -54,8 +45,8 @@ public class OverallViewFragment extends BaseDrFragment{
     public void updateInfo(){
         Double left = MyDDP.getInstance().getAmountLeft(DrUTILS.MONTH);
         Double total = MyDDP.getInstance().getTotalBudget();
-        double percent = (total.doubleValue() - left.doubleValue()) / total.doubleValue();
-        Log.v(TAG, "percent spent: " + percent + "left:" + left.doubleValue());
+        double percent = (total - left) / total;
+        Log.v(TAG, "percent spent: " + percent + "left:" + left);
 
         String newText = left.toString();
         Log.v(TAG, "AMOUNT OF MONEY LEFT TO SPEND THIS MONTH: " + newText);

@@ -2,7 +2,6 @@ package com.shufudesing.drmb.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -21,6 +20,7 @@ import android.widget.ListView;
 
 import com.shufudesing.drmb.DrDDPManager;
 import com.shufudesing.drmb.DrUTILS;
+import com.shufudesing.drmb.Fragments.BaseDrFragment;
 import com.shufudesing.drmb.Fragments.HistoryFragment;
 import com.shufudesing.drmb.Listeners.DrawerItemClickListener;
 import com.shufudesing.drmb.Fragments.OverallViewFragment;
@@ -29,37 +29,38 @@ import com.shufudesing.drmb.R;
 import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeActivity extends ActionBarActivity {
 
     private BroadcastReceiver mReceiver;
-    private MainView bigCircle;
-    private CatsView catsView;
     private DrawerLayout mDrawer;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mToggle;
-    private OverallViewFragment mainFragment;
     private final String TAG = "Home Activity";
+    private BaseDrFragment[] fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         MyDDP ddp = MyDDP.getInstance();
         Log.i(TAG, "oncreate...");
-
-
         setContentView(R.layout.activity_home);
-        mainFragment = new OverallViewFragment();
+
+        fragments = new BaseDrFragment[DrUTILS.DRAWER_ITEMS.length];
+        BaseDrFragment mainFragment = new OverallViewFragment();
+        BaseDrFragment historyFragment = new HistoryFragment();
+
+        fragments[DrUTILS.OVERVIEW] = mainFragment;
+        fragments[DrUTILS.HISTORY_POS] = historyFragment;
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, mainFragment)
                     .commit();
         }
-
-        bigCircle = (MainView) this.findViewById(R.id.mainView);
-        catsView = (CatsView) this.findViewById(R.id.catsView);
 
         mDrawer = (DrawerLayout) this.findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) this.findViewById(R.id.left_drawer);
@@ -108,16 +109,6 @@ public class HomeActivity extends ActionBarActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public MainView getBigCircle(){
-        return bigCircle;
-    }
-
-    public CatsView getCatsView() { return catsView; }
-
-    public Fragment getOverallFragment(){
-        return mainFragment;
-    }
-
     @Override
     protected void onResume(){
         super.onResume();
@@ -161,9 +152,11 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateOverallFragment(){
-        mainFragment.setHasInfo(true);
-        mainFragment.updateInfo();
+    public void expensesUpdate(){
+        fragments[DrUTILS.OVERVIEW].setHasInfo(true);
+        fragments[DrUTILS.OVERVIEW].updateInfo();
+        fragments[DrUTILS.HISTORY_POS].setHasInfo(true);
+        fragments[DrUTILS.HISTORY_POS].updateInfo();
     }
 
     public void selectItem(int pos){
@@ -173,16 +166,18 @@ public class HomeActivity extends ActionBarActivity {
         FragmentManager fManager = getFragmentManager();
 
         if(pos == DrUTILS.OVERVIEW){
+            fragment = fragments[DrUTILS.OVERVIEW];
             fManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fManager.beginTransaction()
-                    .replace(R.id.container, mainFragment, mainFragment.getTag())
+                    .replace(R.id.container, fragment, fragment.getTag())
                     .commit();
         }
         else{
             if (pos == DrUTILS.HISTORY_POS) {
-                    fragment = new HistoryFragment();
+                    fragment = fragments[DrUTILS.HISTORY_POS];
                     title = "History";
             }
+
             else if (pos == DrUTILS.SETTINGS) {}
                 else if (pos == DrUTILS.TIPS) {}
                 else if (pos == DrUTILS.OUTLOOK) {}
