@@ -13,6 +13,8 @@ public class DrUTILS {
     public static final float CAT_BTN_TEXT_SIZE = 50f;
     public static final int LINE_LENGTH = 30;
 
+    public static final int SAVINGS_BAR_SIZE = 300;
+
     public static final String MONTH = "MONTH";
     public static final String WEEK = "WEEK";
     public static final String DAY = "DAY";

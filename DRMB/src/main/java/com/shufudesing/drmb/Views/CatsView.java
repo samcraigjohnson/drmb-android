@@ -25,6 +25,7 @@ import java.util.Map;
 public class CatsView extends View {
 
     private Map<String, ShapeDrawable> bars = new HashMap<String, ShapeDrawable>();
+    private Map<String, ShapeDrawable> greenBars = new HashMap<String, ShapeDrawable>();
     private List<TextDrawable> catNames = new ArrayList<TextDrawable>();
     private static final String TAG = "CATS VIEW";
 
@@ -37,15 +38,16 @@ public class CatsView extends View {
         int padding = 10;
         int width = ((screen.widthPixels)/ DrUTILS.NUM_CATS) - padding;
 
-        Log.v(TAG, "width: "+ width + " NUMCATS: " + DrUTILS.NUM_CATS);
-
         for(int inx = 0; inx < DrUTILS.NUM_CATS; inx++){
-            Log.v(TAG, "indx: " + inx);
             ShapeDrawable newD = new ShapeDrawable(new RectShape());
             newD.getPaint().setColor(DrUTILS.RED);
             newD.setBounds(currX+ padding, 0, currX + width, DrUTILS.CAT_MAX_HEIGHT);
-            Log.v(TAG, "Bounding rect: " + newD.getBounds().toString());
             bars.put(DrUTILS.CAT_DB_NAMES[inx], newD);
+
+            ShapeDrawable greenB = new ShapeDrawable(new RectShape());
+            greenB.getPaint().setColor(DrUTILS.GREEN);
+            greenB.setBounds(currX + padding, 0, currX + width, DrUTILS.CAT_MAX_HEIGHT);
+            greenBars.put(DrUTILS.CAT_DB_NAMES[inx], greenB);
 
             TextDrawable catName = new TextDrawable(DrUTILS.CAT_NAMES[inx], currX+padding + 5, DrUTILS.CAT_MAX_HEIGHT + 30, Color.WHITE);
             catNames.add(catName);
@@ -57,12 +59,14 @@ public class CatsView extends View {
         ShapeDrawable toChange = bars.get(catName);
         Rect b = toChange.getBounds();
         int top = (int) ((1 - percent) * DrUTILS.CAT_MAX_HEIGHT);
-        Log.v(TAG, "New Bounding rect: " + b.toString());
         toChange.setBounds(b.left, top, b.right, DrUTILS.CAT_MAX_HEIGHT);
         this.invalidate();
     }
 
     protected void onDraw(Canvas canvas) {
+        for(ShapeDrawable sd: greenBars.values()){
+            sd.draw(canvas);
+        }
         for(ShapeDrawable sd: bars.values()){
             sd.draw(canvas);
         }

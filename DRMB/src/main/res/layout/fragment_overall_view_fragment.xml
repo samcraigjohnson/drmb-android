@@ -7,6 +7,12 @@
     android:orientation="vertical"
     android:animateLayoutChanges="true" >
 
+    <com.shufudesing.drmb.Views.SavingsView
+        android:id="@+id/savingsView"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
     <com.shufudesing.drmb.Views.MainView
         android:id="@+id/mainView"
         android:layout_width="fill_parent"
