@@ -14,6 +14,7 @@ import com.keysolutions.ddpclient.android.DDPStateSingleton;
 import com.shufudesing.drmb.Collections.Budget;
 import com.shufudesing.drmb.Collections.Category;
 import com.shufudesing.drmb.Collections.Expense;
+import com.shufudesing.drmb.Collections.MeteorCollection;
 import com.shufudesing.drmb.Collections.Transaction;
 import com.shufudesing.drmb.Offline.OfflineStack;
 import com.shufudesing.drmb.Offline.SavedCall;
@@ -37,31 +38,31 @@ public class MyDDP extends DDPStateSingleton {
     private static final Integer mDRMBPort = 3000;
     private static final String TAG = "MyDDP";
 
-    private Map<String, Expense> mExpenses;
-    private Budget mBudget;
+    //private Map<String, Expense> mExpenses;
+   // private Budget mBudget;
     private OfflineStack offlineStack;
 
     protected MyDDP(Context context) {
         super(context);
-        mExpenses = new ConcurrentHashMap<String, Expense>();
+        Map<String, Expense> mExpenses = new ConcurrentHashMap<String, Expense>();
         offlineStack = new OfflineStack(context);
+        offlineStack.setBudget(new Budget());
+        offlineStack.setExpenses(mExpenses);
     }
 
     public static void initInstance(Context context){
         if (mInstance == null) {
-            // Create the instance
             mInstance = new MyDDP(context);
         }
     }
 
     public static MyDDP getInstance() {
-        // Return the instance
         return (MyDDP) mInstance;
     }
 
     public List<Transaction> getTransactions(){
         List<Transaction> transactions = new ArrayList<Transaction>();
-        for(Expense e: mExpenses.values()){
+        for(Expense e: offlineStack.getExpenses().values()){
             for(Transaction t: e.getTransactions()){
                 transactions.add(t);
             }
@@ -93,15 +94,15 @@ public class MyDDP extends DDPStateSingleton {
 
     public Double getTotalSpent(){
         double total = 0;
-        Log.i(TAG, "Getting total spent: " + mExpenses.toString());
+        Log.i(TAG, "Getting total spent: " + offlineStack.getExpenses().toString());
         clearCats();
-        for(Expense e: mExpenses.values()){
+        for(Expense e: offlineStack.getExpenses().values()){
             if(e.isActive().booleanValue()){
                 Log.v(TAG, "is active" + "num trans: " + e.getTransactions().size());
                 for(Transaction t: e.getTransactions()){
                     Log.v(TAG, "Transaction amount:"+t.getAmount());
                     total += t.getAmount();
-                    mBudget.getCats().get(t.getCatName()).addSpending(t.getAmount());
+                    offlineStack.getBudget().getCats().get(t.getCatName()).addSpending(t.getAmount());
                 }
             }
         }
@@ -109,7 +110,7 @@ public class MyDDP extends DDPStateSingleton {
         return new Double(total);
     }
     private void clearCats(){
-        for(Category cat: mBudget.getCats().values()){
+        for(Category cat: offlineStack.getBudget().getCats().values()){
             cat.setSpent(0d);
         }
     }
@@ -117,15 +118,15 @@ public class MyDDP extends DDPStateSingleton {
     public Double getAmountLeft(String dateType){
         double left = 0;
         if(dateType.equals(DrUTILS.MONTH)){
-            left = mBudget.getTotal().doubleValue() - getTotalSpent().doubleValue()
-                    - mBudget.getSave().doubleValue();
+            left = offlineStack.getBudget().getTotal().doubleValue() - getTotalSpent().doubleValue()
+                    - offlineStack.getBudget().getSave().doubleValue();
         }
 
         return new Double(left);
     }
 
     public Map<String, Category> getCategories(){
-        return mBudget.getCats();
+        return offlineStack.getBudget().getCats();
     }
 
     public boolean addExpense(double amount, String cat, String description){
@@ -168,7 +169,7 @@ public class MyDDP extends DDPStateSingleton {
     }
 
     public Double getTotalBudget(){
-        return mBudget.getTotal();
+        return offlineStack.getBudget().getTotal();
     }
 
     public Double getDailyBudget(){
@@ -191,21 +192,21 @@ public class MyDDP extends DDPStateSingleton {
 
         if (collectionName.equals("expenses")) {
             if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
-                mExpenses.put(docId, new Expense(docId, getCollection(collectionName).get(docId)));
-                Log.v(TAG, "Number of expenses: " + mExpenses.size());
+                offlineStack.getExpenses().put(docId, new Expense(docId, getCollection(collectionName).get(docId)));
+                Log.v(TAG, "Number of expenses: " + offlineStack.getExpenses().size());
             } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
-                mExpenses.remove(docId);
+                offlineStack.getExpenses().remove(docId);
             } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
-                mExpenses.get(docId).updateFields(getCollection(collectionName).get(docId));
+                offlineStack.getExpenses().get(docId).updateFields(getCollection(collectionName).get(docId));
             }
         }
         else if(collectionName.equals("budgets")){
             if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
-                mBudget = new Budget(docId, getCollection(collectionName).get(docId));
+                offlineStack.setBudget(new Budget(docId, getCollection(collectionName).get(docId)));
             } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
-                mBudget = null;
+                offlineStack.setBudget(new Budget());
             } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
-                mBudget.updateFields(getCollection(collectionName).get(docId));
+                offlineStack.getBudget().updateFields(getCollection(collectionName).get(docId));
             }
         }
         // do the broadcast after we've taken care of our parties wrapper

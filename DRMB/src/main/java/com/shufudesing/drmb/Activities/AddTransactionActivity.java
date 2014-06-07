@@ -47,6 +47,7 @@ public class AddTransactionActivity  extends ActionBarActivity{
     protected void onResume(){
         super.onResume();
         MyDDP.getInstance().loadStack();
+        MyDDP.getInstance().connectIfNeeded();
         // get ready to handle DDP events
         mReceiver = new BroadcastReceiver() {
             @Override
@@ -70,12 +71,6 @@ public class AddTransactionActivity  extends ActionBarActivity{
         // we want connection state change messages so we know we're logged in
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver,
                 new IntentFilter(MyDDP.MESSAGE_ERROR));
-
-        // show connection error if it happened
-        if (MyDDP.getInstance().getState() == MyDDP.DDPSTATE.Closed) {
-            Log.e("Connection Issue", "Error connecting to server...please try again");
-            MyDDP.getInstance().connectIfNeeded();    // try reconnecting
-        }
     }
 
     @Override

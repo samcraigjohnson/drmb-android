@@ -2,11 +2,13 @@ package com.shufudesing.drmb.Collections;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.shufudesing.drmb.Collections.MeteorCollection;
 
 
 import org.joda.time.DateTime;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +21,11 @@ public class Expense extends MeteorCollection {
 
     private List<Transaction> transactions;
     private static final String TAG = "Expense";
+
+    public Expense(){
+        super();
+        transactions = new ArrayList<Transaction>();
+    }
 
     public Expense(String docId, Map<String, Object> fields){
         super(docId, fields);
@@ -66,6 +73,12 @@ public class Expense extends MeteorCollection {
         //TODO parse javascript date to get java date
         String scriptDate = (String) mFields.get("date");
         return null;
+    }
+
+    @Override
+    public void setFromJson(String json) throws IOException{
+        super.setFromJson(json);
+        this.updateTransactions();
     }
 
 }

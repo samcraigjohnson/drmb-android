@@ -1,5 +1,7 @@
 package com.shufudesing.drmb;
 
+import java.sql.Struct;
+
 /**
  * Created by Sam on 5/9/2014.
  */
@@ -41,4 +43,14 @@ public class DrUTILS {
     public static final int OUTLOOK = 2;
     public static final int TIPS = 3;
     public static final int SETTINGS = 4;
+
+    //JSON
+    public static final String JSON_BUDGET = "budget";
+    public static final String JSON_CALL_STACK = "callStack";
+    public static final String JSON_METHOD_NAME = "methodName";
+    public static final String JSON_METHOD_ARGS= "methodArgs";
+    public static final String JSON_FIELDS = "fields";
+    public static final String JSON_DOC_ID = "docid";
+    public static final String JSON_EXPENSES = "expenses";
+
 }

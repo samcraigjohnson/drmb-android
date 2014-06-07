@@ -111,7 +111,9 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        Log.v(TAG, "On resume home activity... loading stack...");
         MyDDP.getInstance().loadStack();
+        expensesUpdate();
         mReceiver = new DrDDPManager(MyDDP.getInstance(), this);
         MyDDP.getInstance().connectIfNeeded();
     }

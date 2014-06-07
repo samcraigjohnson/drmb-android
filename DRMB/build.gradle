@@ -29,4 +29,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:4.2.42'
     compile 'com.keysolutions:android-ddp-client:0.5.7.+'
     compile 'net.danlew:android.joda:2.3.3'
+    compile 'com.cedarsoftware:json-io:2.6.0'
 }
