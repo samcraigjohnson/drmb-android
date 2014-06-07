@@ -46,6 +46,7 @@ public class AddTransactionActivity  extends ActionBarActivity{
     @Override
     protected void onResume(){
         super.onResume();
+        MyDDP.getInstance().loadStack();
         // get ready to handle DDP events
         mReceiver = new BroadcastReceiver() {
             @Override
@@ -80,6 +81,7 @@ public class AddTransactionActivity  extends ActionBarActivity{
     @Override
     public void onPause() {
         super.onPause();
+        MyDDP.getInstance().saveStack();
         if (mReceiver != null) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
             mReceiver = null;
@@ -100,7 +102,10 @@ public class AddTransactionActivity  extends ActionBarActivity{
         String locationVal = location.getText().toString();
         String category = categoryView.getSelectedCategory();
         Log.v(TAG, amountVal+":"+descripVal+":"+locationVal+":"+category);
-        MyDDP.getInstance().addExpense(amountVal, category, descripVal);
+        boolean sent = MyDDP.getInstance().addExpense(amountVal, category, descripVal);
+        if(!sent){
+            finish();
+        }
     }
 
     @Override

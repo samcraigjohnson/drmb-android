@@ -15,6 +15,8 @@ import com.shufudesing.drmb.Collections.Budget;
 import com.shufudesing.drmb.Collections.Category;
 import com.shufudesing.drmb.Collections.Expense;
 import com.shufudesing.drmb.Collections.Transaction;
+import com.shufudesing.drmb.Offline.OfflineStack;
+import com.shufudesing.drmb.Offline.SavedCall;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import java.util.Collections;
 import java.util.FormatFlagsConversionMismatchException;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -36,10 +39,12 @@ public class MyDDP extends DDPStateSingleton {
 
     private Map<String, Expense> mExpenses;
     private Budget mBudget;
+    private OfflineStack offlineStack;
 
     protected MyDDP(Context context) {
         super(context);
         mExpenses = new ConcurrentHashMap<String, Expense>();
+        offlineStack = new OfflineStack(context);
     }
 
     public static void initInstance(Context context){
@@ -63,6 +68,27 @@ public class MyDDP extends DDPStateSingleton {
         }
         Collections.sort(transactions);
         return transactions;
+    }
+
+    /**
+     * Call any methods that were saved while not connected
+     * to the meteor server
+     */
+    public void callBackStackMethods(){
+        Stack<SavedCall> calls = offlineStack.getCallStack();
+        while(!calls.isEmpty()){
+            SavedCall call = calls.pop();
+            mDDP.call(call.getMethodName(), call.getArgs());
+        }
+        offlineStack.resetStack();
+    }
+
+    public void saveStack(){
+        offlineStack.writeData();
+    }
+
+    public void loadStack(){
+        offlineStack.readData();
     }
 
     public Double getTotalSpent(){
@@ -102,35 +128,43 @@ public class MyDDP extends DDPStateSingleton {
         return mBudget.getCats();
     }
 
-    public void addExpense(double amount, String cat, String description){
+    public boolean addExpense(double amount, String cat, String description){
         Object[] methodArgs = new Object[3];
         methodArgs[0] = amount;
         methodArgs[1] = cat;
-        methodArgs[2] = description;
-        mDDP.call("addExpense", methodArgs, new DDPListener(){
-            @Override
-            @SuppressWarnings("unchecked")
-            public void onResult(Map<String, Object> jsonFields){
-                Log.v(TAG, "Resulting json: " + jsonFields.toString());
-                 if(jsonFields.get("msg").equals("result")){
-                     Map<String, Object> result = (Map<String, Object>) jsonFields
-                             .get(DDPClient.DdpMessageField.RESULT);
-                     Intent broadcastIntent = new Intent();
-                     broadcastIntent.setAction(MESSAGE_METHODRESUlT);
-                     broadcastIntent.putExtra(MESSAGE_EXTRA_RESULT,
-                             mGSON.toJson(result));
-                     LocalBroadcastManager.getInstance(
-                             DrApplication.getAppContext()).sendBroadcast(
-                             broadcastIntent);
-                     Log.v(TAG, "sending intent");
-                 }
-                 else if(jsonFields.containsKey("error")){
-                     Map<String, Object> error = (Map<String, Object>) jsonFields
-                             .get(DDPClient.DdpMessageField.ERROR);
-                     broadcastDDPError((String) error.get("message"));
-                 }
-            }
-        });
+        methodArgs[2] = description.trim();
+        if(isConnected() && isLoggedIn()) {
+            mDDP.call("addExpense", methodArgs, new DDPListener() {
+                @Override
+                @SuppressWarnings("unchecked")
+                public void onResult(Map<String, Object> jsonFields) {
+                    Log.v(TAG, "Resulting json: " + jsonFields.toString());
+                    if (jsonFields.get("msg").equals("result")) {
+                        Map<String, Object> result = (Map<String, Object>) jsonFields
+                                .get(DDPClient.DdpMessageField.RESULT);
+                        Intent broadcastIntent = new Intent();
+                        broadcastIntent.setAction(MESSAGE_METHODRESUlT);
+                        broadcastIntent.putExtra(MESSAGE_EXTRA_RESULT,
+                                mGSON.toJson(result));
+                        LocalBroadcastManager.getInstance(
+                                DrApplication.getAppContext()).sendBroadcast(
+                                broadcastIntent);
+                        Log.v(TAG, "sending intent");
+                    } else if (jsonFields.containsKey("error")) {
+                        Map<String, Object> error = (Map<String, Object>) jsonFields
+                                .get(DDPClient.DdpMessageField.ERROR);
+                        broadcastDDPError((String) error.get("message"));
+                    }
+                }
+            });
+            return true;
+        }
+        else{
+            Log.v(TAG, "Logged in: " + isLoggedIn() + " Connected: " + isConnected());
+            connectIfNeeded();
+            offlineStack.saveCall("addExpense", methodArgs);
+            return false;
+        }
     }
 
     public Double getTotalBudget(){
@@ -157,21 +191,21 @@ public class MyDDP extends DDPStateSingleton {
 
         if (collectionName.equals("expenses")) {
             if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
-                mExpenses.put(docId, new Expense(docId, (Map<String, Object>) getCollection(collectionName).get(docId)));
+                mExpenses.put(docId, new Expense(docId, getCollection(collectionName).get(docId)));
                 Log.v(TAG, "Number of expenses: " + mExpenses.size());
             } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
                 mExpenses.remove(docId);
             } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
-                mExpenses.get(docId).updateFields((Map<String, Object>) getCollection(collectionName).get(docId));
+                mExpenses.get(docId).updateFields(getCollection(collectionName).get(docId));
             }
         }
         else if(collectionName.equals("budgets")){
             if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
-                mBudget = new Budget(docId, (Map<String, Object>) getCollection(collectionName).get(docId));
+                mBudget = new Budget(docId, getCollection(collectionName).get(docId));
             } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
                 mBudget = null;
             } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
-                mBudget.updateFields((Map<String, Object>) getCollection(collectionName).get(docId));
+                mBudget.updateFields(getCollection(collectionName).get(docId));
             }
         }
         // do the broadcast after we've taken care of our parties wrapper

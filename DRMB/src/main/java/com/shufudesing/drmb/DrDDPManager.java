@@ -13,6 +13,7 @@ import com.shufudesing.drmb.Activities.DrLogin;
 import com.shufudesing.drmb.Activities.HomeActivity;
 import com.shufudesing.drmb.Collections.Category;
 import com.shufudesing.drmb.Fragments.OverallViewFragment;
+import com.shufudesing.drmb.Offline.OfflineStack;
 import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
 
@@ -70,7 +71,10 @@ public class DrDDPManager extends DDPBroadcastReceiver{
         mDDP.subscribe("budget", new Object[]{});
         mDDP.subscribe("spending", new Object[] {});
         mDDP.subscribe("savingsGoals", new Object[] {});
+
+        mDDP.callBackStackMethods();
     }
+
     @Override
     protected void onLogout() {
         Log.i(TAG, "Logged out");

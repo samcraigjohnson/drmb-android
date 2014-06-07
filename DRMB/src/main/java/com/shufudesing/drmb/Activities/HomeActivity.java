@@ -45,7 +45,6 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyDDP ddp = MyDDP.getInstance();
         Log.i(TAG, "oncreate...");
         setContentView(R.layout.activity_home);
 
@@ -112,6 +111,7 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        MyDDP.getInstance().loadStack();
         mReceiver = new DrDDPManager(MyDDP.getInstance(), this);
         MyDDP.getInstance().connectIfNeeded();
     }
@@ -119,7 +119,7 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     public void onPause() {
         super.onPause();
-
+        MyDDP.getInstance().saveStack();
         if (mReceiver != null) {
             // unhook the receiver
             LocalBroadcastManager.getInstance(this)
