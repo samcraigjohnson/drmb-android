@@ -154,12 +154,6 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void expensesUpdate(){
-        fragments[DrUTILS.OVERVIEW].setHasInfo(true);
-        fragments[DrUTILS.OVERVIEW].updateInfo();
-        fragments[DrUTILS.HISTORY_POS].setHasInfo(true);
-        fragments[DrUTILS.HISTORY_POS].updateInfo();
-    }
 
     public void selectItem(int pos){
         Log.v(TAG, "pos: " + pos);
@@ -207,4 +201,17 @@ public class HomeActivity extends ActionBarActivity {
             super.onBackPressed();
         }
     }
+
+    public void expensesUpdate(){
+        fragments[DrUTILS.OVERVIEW].setHasInfo(true);
+        fragments[DrUTILS.OVERVIEW].updateInfo();
+        fragments[DrUTILS.HISTORY_POS].setHasInfo(true);
+        fragments[DrUTILS.HISTORY_POS].updateInfo();
+    }
+
+    public void savingsGoalUpdate(){
+        Log.v(TAG, "updating savings goal");
+        ((OverallViewFragment)fragments[DrUTILS.OVERVIEW]).updateSavingsGoal();
+    }
+
 }

@@ -12,6 +12,8 @@ import com.shufudesing.drmb.MyDDP;
 import com.shufudesing.drmb.R;
 import com.shufudesing.drmb.Views.CatsView;
 import com.shufudesing.drmb.Views.MainView;
+import com.shufudesing.drmb.Views.SavingsView;
+
 import java.util.Map;
 
 /**
@@ -22,6 +24,7 @@ import java.util.Map;
 public class OverallViewFragment extends BaseDrFragment{
     private CatsView catsView;
     private MainView circle;
+    private SavingsView savingsView;
     private final String TAG = "OverallViewFragment";
 
     public OverallViewFragment() { }
@@ -38,7 +41,7 @@ public class OverallViewFragment extends BaseDrFragment{
         View v = inflater.inflate(R.layout.fragment_overall_view_fragment, container, false);
         catsView = (CatsView) v.findViewById(R.id.catsView);
         circle =  (MainView) v.findViewById(R.id.mainView);
-        Log.v(TAG, "VIEW INFLATED");
+        savingsView = (SavingsView) v.findViewById(R.id.savingsView);
         checkChange();
         return v;
     }
@@ -57,5 +60,10 @@ public class OverallViewFragment extends BaseDrFragment{
         for(Map.Entry<String, Category> cat: cats.entrySet()){
             catsView.setHeight(cat.getKey(), cat.getValue().getPercentSpent());
         }
+
+    }
+
+    public void updateSavingsGoal(){
+        savingsView.setSavingsPercent(MyDDP.getInstance().getPercentSaved());
     }
 }

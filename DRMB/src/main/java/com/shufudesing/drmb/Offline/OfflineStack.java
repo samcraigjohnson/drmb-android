@@ -2,12 +2,17 @@ package com.shufudesing.drmb.Offline;
 
 import android.content.Context;
 
+//import android.util.JsonReader;
 import android.util.Log;
 
 
 import com.cedarsoftware.util.io.JsonObject;
+import com.cedarsoftware.util.io.JsonWriter;
+import com.cedarsoftware.util.io.JsonReader;
+import com.google.gson.Gson;
 import com.shufudesing.drmb.Collections.Budget;
 import com.shufudesing.drmb.Collections.Expense;
+import com.shufudesing.drmb.Collections.SavingsGoal;
 import com.shufudesing.drmb.DrUTILS;
 
 
@@ -34,6 +39,7 @@ public class OfflineStack {
 
     private Budget budget;
     private Map<String, Expense> mExpenses;
+    private SavingsGoal currGoal;
     private Stack<SavedCall> callStack;
     private Context c;
     private final String OUTPUT_FILE = "offline_data.json";
@@ -60,6 +66,14 @@ public class OfflineStack {
         return mExpenses;
     }
 
+    public void setSavingsGoal(SavingsGoal sg){
+        currGoal = sg;
+    }
+
+    public SavingsGoal getSavingsGoal(){
+        return currGoal;
+    }
+
     public void saveCall(String methodName, Object[] methodArgs){
         callStack.push(new SavedCall(methodName, methodArgs));
     }
@@ -76,15 +90,13 @@ public class OfflineStack {
     public void writeData(){
         FileOutputStream fos;
         try {
-            JSONObject jo = new JSONObject();
             JsonObject jo2 = new JsonObject();
-            if(callStack.size() > 0){
-                writeStack(jo);
-            }
+            if(callStack.size() > 0)
+                writeStack(jo2);
             if(budget.getFields().size() > 0)
                 writeBudget(jo2);
-            if(mExpenses.size() > 0)
-                writeExpenses(jo);
+            if(mExpenses.size() > 0){}
+               // writeExpenses(jo2);
 
             fos = c.openFileOutput(OUTPUT_FILE, Context.MODE_PRIVATE);
             fos.write(jo2.toString().getBytes());
@@ -107,8 +119,8 @@ public class OfflineStack {
             Log.v(TAG, "inputstream closed: " + writer.toString());
             JSONObject jo = new JSONObject(writer.toString());
             Log.v(TAG, "jo created" + jo.toString());
-            if(jo.has(DrUTILS.JSON_CALL_STACK)){}
-                //readStack(jo);
+            if(jo.has(DrUTILS.JSON_CALL_STACK))
+                readStack(jo);
             if(jo.has(DrUTILS.JSON_BUDGET)) {
                 Log.v(TAG, "ATTEMPTING TO READ BUDGET");
                 readBudget(jo);
@@ -140,7 +152,7 @@ public class OfflineStack {
         Log.v(TAG, "STACK: "+ callStack.peek().getMethodName() + ": " + callStack.peek().getArgs().toString());
     }
 
-    private void writeStack(JSONObject jo) throws JSONException {
+    private void writeStack(JsonObject jo) throws JSONException {
         JSONArray stackArray = new JSONArray();
         while(!callStack.isEmpty()){
             JSONObject stackObj = new JSONObject();
@@ -158,16 +170,14 @@ public class OfflineStack {
         Log.v(TAG, "Writing callstack: " + jo.toString());
     }
 
-    private void writeExpenses(JSONObject jo) throws JSONException, IOException{
-        JSONArray eArray = new JSONArray();
-        for(Expense e: mExpenses.values()){
-            eArray.put(e.getJsonRepresentation());
-        }
-        Log.v(TAG, "Expenses write: " + eArray.toString());
-        jo.put(DrUTILS.JSON_EXPENSES, eArray);
+    private void writeExpenses(JsonObject jo) throws JSONException, IOException{
+        Gson gson = new Gson();
+        String json = gson.toJson(mExpenses);
+        jo.put(DrUTILS.JSON_EXPENSES, json);
     }
 
     private void readExpense(JSONObject jo) throws JSONException, IOException{
+        /*
         JSONArray eArray = jo.getJSONArray(DrUTILS.JSON_EXPENSES);
         Map<String, Expense> savedExpenses = new HashMap<String, Expense>();
         for(int i = 0; i < eArray.length(); i++){
@@ -177,7 +187,9 @@ public class OfflineStack {
             Log.v(TAG, "Expense: " + e.getFields().toString());
             Log.v(TAG, "Transactions: " + e.getTransactions() + ", size: " + e.getTransactions().size());
         }
-        mExpenses = savedExpenses;
+        mExpenses = savedExpenses;*/
+        Gson gson = new Gson();
+        mExpenses = gson.fromJson(jo.get(DrUTILS.JSON_EXPENSES).toString(), HashMap.class);
 
         Log.v(TAG, "Expenses Read: " + mExpenses.toString());
     }

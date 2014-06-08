@@ -61,6 +61,11 @@ public class DrDDPManager extends DDPBroadcastReceiver{
                 mActivity.expensesUpdate();
             }
         }
+        else if(subscriptionName.equals("savingsGoals")){
+            if(changeType.equals(DDPClient.DdpMessageType.READY) || changeType.equals(DDPClient.DdpMessageType.CHANGED)){
+                mActivity.savingsGoalUpdate();
+            }
+        }
     }
     @Override
     protected void onLogin() {

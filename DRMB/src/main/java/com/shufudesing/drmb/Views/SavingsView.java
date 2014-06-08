@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -48,18 +50,31 @@ public class SavingsView extends View {
             actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
         }
 
-        savingsText = new TextDrawable("ON TRACK TO SAVE", 5, (int) actionBarHeight - 30, Color.WHITE);
+        savingsText = new TextDrawable("ON TRACK TO SAVE", 5, (int) actionBarHeight - 50, Color.WHITE);
         savingsText.setTextSize(20f);
         savingsText.setTextAlign(Paint.Align.LEFT);
 
         blueBar = new ShapeDrawable(new RectShape());
         blueBar.getPaint().setColor(DrUTILS.BLUE);
         blueBar.setBounds(10, (int) DrUTILS.INFO_TEXT_SIZE + 10, 250, (int) (DrUTILS.INFO_TEXT_SIZE + 10 + (width * .66)));
+
+        greenBar = new ShapeDrawable(new RectShape());
+        greenBar.getPaint().setColor(DrUTILS.GREEN);
+        greenBar.setBounds(10, (int) DrUTILS.INFO_TEXT_SIZE + 10, 250, (int) (DrUTILS.INFO_TEXT_SIZE + 10 + (width * .66)));
     }
 
     @Override
     protected void onDraw(Canvas c){
         savingsText.draw(c);
         blueBar.draw(c);
+        greenBar.draw(c);
+    }
+
+    public void setSavingsPercent(double percent){
+        Log.v("SGV", "Setting green bar with percent: " + percent);
+        Rect bounds = greenBar.getBounds();
+        double newWidth = bounds.right * percent;
+        greenBar.setBounds(bounds.left, bounds.top, (int) newWidth, bounds.bottom);
+        this.invalidate();
     }
 }

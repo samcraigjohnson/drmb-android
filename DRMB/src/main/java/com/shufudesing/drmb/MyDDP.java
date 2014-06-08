@@ -15,6 +15,7 @@ import com.shufudesing.drmb.Collections.Budget;
 import com.shufudesing.drmb.Collections.Category;
 import com.shufudesing.drmb.Collections.Expense;
 import com.shufudesing.drmb.Collections.MeteorCollection;
+import com.shufudesing.drmb.Collections.SavingsGoal;
 import com.shufudesing.drmb.Collections.Transaction;
 import com.shufudesing.drmb.Offline.OfflineStack;
 import com.shufudesing.drmb.Offline.SavedCall;
@@ -37,9 +38,6 @@ public class MyDDP extends DDPStateSingleton {
     private static final String mDRMBServer = "192.168.1.2";
     private static final Integer mDRMBPort = 3000;
     private static final String TAG = "MyDDP";
-
-    //private Map<String, Expense> mExpenses;
-   // private Budget mBudget;
     private OfflineStack offlineStack;
 
     protected MyDDP(Context context) {
@@ -48,6 +46,7 @@ public class MyDDP extends DDPStateSingleton {
         offlineStack = new OfflineStack(context);
         offlineStack.setBudget(new Budget());
         offlineStack.setExpenses(mExpenses);
+        offlineStack.setSavingsGoal(new SavingsGoal());
     }
 
     public static void initInstance(Context context){
@@ -82,6 +81,10 @@ public class MyDDP extends DDPStateSingleton {
             mDDP.call(call.getMethodName(), call.getArgs());
         }
         offlineStack.resetStack();
+    }
+
+    public double getPercentSaved(){
+        return offlineStack.getSavingsGoal().getAmountSaved() / offlineStack.getSavingsGoal().getGoal();
     }
 
     public void saveStack(){
@@ -209,6 +212,16 @@ public class MyDDP extends DDPStateSingleton {
                 offlineStack.getBudget().updateFields(getCollection(collectionName).get(docId));
             }
         }
+        else if(collectionName.equals("savingsGoals")){
+            if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
+                offlineStack.setSavingsGoal(new SavingsGoal(docId, getCollection(collectionName).get(docId)));
+            } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
+                offlineStack.setSavingsGoal(new SavingsGoal());
+            } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
+                offlineStack.getSavingsGoal().updateFields(getCollection(collectionName).get(docId));
+            }
+        }
+
         // do the broadcast after we've taken care of our parties wrapper
         super.broadcastSubscriptionChanged(collectionName, changetype, docId);
     }
