@@ -8,34 +8,40 @@ import java.sql.Struct;
 public class DrUTILS {
 
     //Circle constants
-    public static final int CIRCLE_SIZE = 400;
-    public static final int RING_SIZE = 20;
+    public static final int CIRCLE_SIZE = 390;
+    public static final int RING_SIZE = 35;
     public static final float INFO_TEXT_SIZE = 45f;
     public static final float MONEY_TEXT_SIZE = 75f;
     public static final float CAT_BTN_TEXT_SIZE = 50f;
     public static final int LINE_LENGTH = 30;
 
-    public static final int SAVINGS_BAR_SIZE = 300;
+    //savings view constants
+    public static final int SAVINGS_BAR_SIZE = 225;
+    public static final float SAVINGS_TEXT_SIZE = 45f;
+    public static final float ALT_SAVINGS_TEXT_SIZE = 35f;
 
+    //time constants
     public static final String MONTH = "MONTH";
     public static final String WEEK = "WEEK";
     public static final String DAY = "DAY";
 
     //App Color constants
-    public static final int GREEN = 0xff7f9a65;
-    public static final int RED = 0xffcd5c5c;
-    public static final int BLUE = 0xffc0d9d9;
-    public static final int GRAY = 0xffe5e5e5;
+    public static final int GREEN = 0xff41ad48;
+    public static final int RED = 0xffed726b;
+    public static final int BLUE = 0xff5da4da;
+    public static final int ORANGE = 0xfff9b814;
+    public static final int GRAY = 0xff343436;
 
     //Category bar constants
     public static final int NUM_CATS = 5;
     public static final int CAT_MAX_HEIGHT = 200;
     public static final String[] CAT_NAMES = {"FUN", "FOOD", "BILLS", "HOME", "TRANSIT"};
     public static final String[] CAT_DB_NAMES = {"fun", "food", "bills", "rent", "trans"};
-    public static final String[] DRAWER_ITEMS = {"OVERVIEW", "SAVED LOCATIONS", "HISTORY", "OUTLOOK", "TIPS", "SETTINGS"};
+
 
     public static final int CAT_BTN_HEIGHT = 100;
 
+    public static final String[] DRAWER_ITEMS = {"OVERVIEW", "SAVED LOCATIONS", "HISTORY", "OUTLOOK", "TIPS", "SETTINGS"};
     //Positions for drawer items
     public static final int OVERVIEW = 0;
     public static final int SAVED_LOCATIONS = 1;

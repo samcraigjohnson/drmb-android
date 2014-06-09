@@ -116,7 +116,10 @@ public class OfflineStack {
             IOUtils.copy(fis, writer, "UTF-8");
             Log.v(TAG, "ioutils copied");
             fis.close();
-            Log.v(TAG, "inputstream closed: " + writer.toString());
+            //JsonReader jr = new JsonReader(fis);
+            // jr.
+            //Log.v(TAG, "inputstream closed: " + writer.toString());
+            //Map<String, Object> jMap = JsonReader.jsonToMaps(writer.toString());
             JSONObject jo = new JSONObject(writer.toString());
             Log.v(TAG, "jo created" + jo.toString());
             if(jo.has(DrUTILS.JSON_CALL_STACK))
@@ -127,6 +130,7 @@ public class OfflineStack {
             }
             if(jo.has(DrUTILS.JSON_EXPENSES)){}
                 //readExpense(jo);
+
         }
         catch (Exception e){
             e.printStackTrace();

@@ -12,7 +12,7 @@ public abstract class BaseDrFragment extends Fragment {
         hasInfo = b;
     }
 
-    protected void checkChange(){
+    public void checkChange(){
         if(hasInfo){
             updateInfo();
         }

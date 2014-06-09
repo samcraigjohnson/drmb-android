@@ -45,6 +45,15 @@ public class OverallViewFragment extends BaseDrFragment{
         checkChange();
         return v;
     }
+
+    @Override
+    public void checkChange(){
+        if(hasInfo){
+            updateInfo();
+            updateSavingsGoal();
+        }
+    }
+
     public void updateInfo(){
         Double left = MyDDP.getInstance().getAmountLeft(DrUTILS.MONTH);
         Double total = MyDDP.getInstance().getTotalBudget();
@@ -65,5 +74,6 @@ public class OverallViewFragment extends BaseDrFragment{
 
     public void updateSavingsGoal(){
         savingsView.setSavingsPercent(MyDDP.getInstance().getPercentSaved());
+        savingsView.setSavingsInfo(MyDDP.getInstance().getSavingAmountLeft(), MyDDP.getInstance().getMonthsLeft());
     }
 }

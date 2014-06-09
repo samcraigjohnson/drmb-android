@@ -25,4 +25,11 @@ public class SavingsGoal extends MeteorCollection{
         return Double.parseDouble(mFields.get("goal").toString());
     }
 
+    public double getAmountLeft(){ return getGoal() - getAmountSaved();}
+
+    public String getMonthsLeft(){
+        //TODO calculate this with JodaTime
+        return  mFields.get("months").toString();
+    }
+
 }

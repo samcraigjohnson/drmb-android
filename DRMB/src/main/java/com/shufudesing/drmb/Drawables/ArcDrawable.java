@@ -27,7 +27,7 @@ public class ArcDrawable extends Drawable {
         startAngle = -90f;
         sweepAngle = 90f;
 
-        paint.setColor(DrUTILS.RED);
+        paint.setColor(DrUTILS.ORANGE);
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
     }

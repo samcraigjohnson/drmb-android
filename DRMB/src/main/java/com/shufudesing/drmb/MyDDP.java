@@ -87,6 +87,15 @@ public class MyDDP extends DDPStateSingleton {
         return offlineStack.getSavingsGoal().getAmountSaved() / offlineStack.getSavingsGoal().getGoal();
     }
 
+    public String getSavingAmountLeft(){
+        return String.valueOf(offlineStack.getSavingsGoal().getAmountLeft());
+    }
+
+    public String getMonthsLeft(){
+        Log.v(TAG, "recalling months left");
+        return offlineStack.getSavingsGoal().getMonthsLeft();
+    }
+
     public void saveStack(){
         offlineStack.writeData();
     }

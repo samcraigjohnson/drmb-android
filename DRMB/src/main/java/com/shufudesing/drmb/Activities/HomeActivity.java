@@ -51,13 +51,12 @@ public class HomeActivity extends ActionBarActivity {
         fragments = new BaseDrFragment[DrUTILS.DRAWER_ITEMS.length];
         BaseDrFragment mainFragment = new OverallViewFragment();
         BaseDrFragment historyFragment = new HistoryFragment();
-
         fragments[DrUTILS.OVERVIEW] = mainFragment;
         fragments[DrUTILS.HISTORY_POS] = historyFragment;
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, mainFragment)
+                    .add(R.id.container, fragments[DrUTILS.OVERVIEW])
                     .commit();
         }
 
@@ -112,10 +111,14 @@ public class HomeActivity extends ActionBarActivity {
     protected void onResume(){
         super.onResume();
         Log.v(TAG, "On resume home activity... loading stack...");
+
         MyDDP.getInstance().loadStack();
-        expensesUpdate();
-        mReceiver = new DrDDPManager(MyDDP.getInstance(), this);
         MyDDP.getInstance().connectIfNeeded();
+        for(BaseDrFragment bdf: fragments){
+            //bdf.checkChange();
+        }
+
+        mReceiver = new DrDDPManager(MyDDP.getInstance(), this);
     }
 
     @Override

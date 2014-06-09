@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 
 
 /**
@@ -67,6 +69,19 @@ public class TextDrawable extends Drawable{
             canvas.drawText(text,x,y,paint);
     }
 
+    public void correctWidth(int desiredWidth){
+        float currentSize = paint.getTextSize();
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        while(bounds.width() > desiredWidth){
+            currentSize--;
+            paint.setTextSize(currentSize);
+            paint.getTextBounds(text, 0, text.length(), bounds);
+        }
+
+        paint.setTextSize(currentSize);
+    }
 
     @Override
     public void setAlpha(int i) {
