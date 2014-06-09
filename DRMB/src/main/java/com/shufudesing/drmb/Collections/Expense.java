@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ import java.util.Map;
  */
 public class Expense extends MeteorCollection {
 
-    private List<Transaction> transactions;
+    private transient List<Transaction> transactions;
     private static final String TAG = "Expense";
 
     public Expense(){
@@ -76,7 +77,7 @@ public class Expense extends MeteorCollection {
     }
 
     @Override
-    public void setFromJson(String json) throws IOException{
+    public void setFromJson(Map<String, Object> json){
         super.setFromJson(json);
         this.updateTransactions();
     }

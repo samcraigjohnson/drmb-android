@@ -3,6 +3,7 @@ package com.shufudesing.drmb.Views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
@@ -49,7 +50,8 @@ public class CatsView extends View {
             greenB.setBounds(currX + padding, 0, currX + width, DrUTILS.CAT_MAX_HEIGHT);
             greenBars.put(DrUTILS.CAT_DB_NAMES[inx], greenB);
 
-            TextDrawable catName = new TextDrawable(DrUTILS.CAT_NAMES[inx], currX+padding + 5, DrUTILS.CAT_MAX_HEIGHT + 30, Color.WHITE);
+            TextDrawable catName = new TextDrawable(DrUTILS.CAT_NAMES[inx], currX+(width/2), DrUTILS.CAT_MAX_HEIGHT + 30, Color.WHITE);
+            catName.setTextAlign(Paint.Align.CENTER);
             catNames.add(catName);
             currX += (width + padding);
         }

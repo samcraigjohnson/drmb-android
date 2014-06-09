@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
@@ -84,6 +85,7 @@ public class HomeActivity extends ActionBarActivity {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setBackgroundDrawable(new ColorDrawable(DrUTILS.RED));
     }
 
     @Override

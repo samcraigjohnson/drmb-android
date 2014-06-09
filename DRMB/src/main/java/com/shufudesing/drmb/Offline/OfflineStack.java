@@ -96,7 +96,7 @@ public class OfflineStack {
             if(budget.getFields().size() > 0)
                 writeBudget(jo2);
             if(mExpenses.size() > 0){}
-               // writeExpenses(jo2);
+                writeExpenses(jo2);
 
             fos = c.openFileOutput(OUTPUT_FILE, Context.MODE_PRIVATE);
             fos.write(jo2.toString().getBytes());
@@ -111,25 +111,18 @@ public class OfflineStack {
         FileInputStream fis;
         try{
             fis = c.openFileInput(OUTPUT_FILE);
-            Log.v(TAG, "File opened");
             StringWriter writer = new StringWriter();
             IOUtils.copy(fis, writer, "UTF-8");
-            Log.v(TAG, "ioutils copied");
             fis.close();
-            //JsonReader jr = new JsonReader(fis);
-            // jr.
-            //Log.v(TAG, "inputstream closed: " + writer.toString());
-            //Map<String, Object> jMap = JsonReader.jsonToMaps(writer.toString());
-            JSONObject jo = new JSONObject(writer.toString());
+            Gson gson = new Gson();
+            Map<String, Object> jo = gson.fromJson(writer.toString(), HashMap.class);
             Log.v(TAG, "jo created" + jo.toString());
-            if(jo.has(DrUTILS.JSON_CALL_STACK))
-                readStack(jo);
-            if(jo.has(DrUTILS.JSON_BUDGET)) {
-                Log.v(TAG, "ATTEMPTING TO READ BUDGET");
-                readBudget(jo);
-            }
-            if(jo.has(DrUTILS.JSON_EXPENSES)){}
-                //readExpense(jo);
+            if(jo.containsKey(DrUTILS.JSON_CALL_STACK)){}
+               // readStack(jo.get(DrUTILS.JSON_CALL_STACK));
+            if(jo.containsKey(DrUTILS.JSON_BUDGET)) {}
+               // readBudget(jo.get(DrUTILS.JSON_BUDGET));
+            if(jo.containsKey(DrUTILS.JSON_EXPENSES))
+                readExpense((Map<String,Object>) jo.get(DrUTILS.JSON_EXPENSES));
 
         }
         catch (Exception e){
@@ -177,25 +170,18 @@ public class OfflineStack {
     private void writeExpenses(JsonObject jo) throws JSONException, IOException{
         Gson gson = new Gson();
         String json = gson.toJson(mExpenses);
+        //JsonArr
         jo.put(DrUTILS.JSON_EXPENSES, json);
     }
 
-    private void readExpense(JSONObject jo) throws JSONException, IOException{
-        /*
-        JSONArray eArray = jo.getJSONArray(DrUTILS.JSON_EXPENSES);
-        Map<String, Expense> savedExpenses = new HashMap<String, Expense>();
-        for(int i = 0; i < eArray.length(); i++){
-            Expense e = new Expense();
-            e.setFromJson((String)eArray.get(i));
-            savedExpenses.put(e.getDocId(), e);
-            Log.v(TAG, "Expense: " + e.getFields().toString());
-            Log.v(TAG, "Transactions: " + e.getTransactions() + ", size: " + e.getTransactions().size());
+    private void readExpense(Map<String, Object> jo) throws JSONException, IOException{
+        Map<String, Expense> newExpenses = new HashMap<String, Expense>();
+        for(String docid: jo.keySet()){
+            Expense e = new Expense(docid, (Map<String,Object>)((Map<String, Object>) jo.get(docid)).get("mFields"));
+            newExpenses.put(docid, e);
         }
-        mExpenses = savedExpenses;*/
-        Gson gson = new Gson();
-        mExpenses = gson.fromJson(jo.get(DrUTILS.JSON_EXPENSES).toString(), HashMap.class);
 
-        Log.v(TAG, "Expenses Read: " + mExpenses.toString());
+        mExpenses = newExpenses;
     }
 
     private void writeBudget(JsonObject jo) throws JSONException, IOException{
@@ -205,7 +191,7 @@ public class OfflineStack {
 
     private void readBudget(JSONObject jo) throws JSONException, IOException{
         Log.v(TAG, "JO: " + jo.toString());
-        budget.setFromJson(jo.get(DrUTILS.JSON_BUDGET).toString());
+        //budget.setFromJson(jo.get(DrUTILS.JSON_BUDGET).toString());
         Log.v(TAG, "Budget Read: " + budget.toString());
     }
 }

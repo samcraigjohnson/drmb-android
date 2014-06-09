@@ -3,9 +3,8 @@ package com.shufudesing.drmb.Collections;
 
 import android.util.Log;
 
-import com.cedarsoftware.util.io.JsonObject;
-import com.cedarsoftware.util.io.JsonReader;
-import com.cedarsoftware.util.io.JsonWriter;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.shufudesing.drmb.DrUTILS;
 
 import java.io.IOException;
@@ -41,16 +40,16 @@ public class MeteorCollection {
     }
 
     public String getJsonRepresentation() throws IOException{
+        Gson gson = new Gson();
         JsonObject jo = new JsonObject();
-        jo.put(DrUTILS.JSON_FIELDS, JsonWriter.objectToJson(mFields));
-        jo.put(DrUTILS.JSON_DOC_ID, JsonWriter.objectToJson(mDocId));
+        jo.addProperty(DrUTILS.JSON_FIELDS, gson.toJson(mFields));
+        jo.addProperty(DrUTILS.JSON_DOC_ID, gson.toJson(mDocId));
         return jo.toString();
     }
 
-    public void setFromJson(String json) throws IOException{
-        Map collection = JsonReader.jsonToMaps(json);
-        this.mFields = (Map) collection.get(DrUTILS.JSON_FIELDS);
-        this.mDocId = (String) collection.get(DrUTILS.JSON_DOC_ID);
+    public void setFromJson(Map<String, Object> map){
+        this.mFields = (Map<String,Object>) map.get(DrUTILS.JSON_FIELDS);
+        this.mDocId = (String) map.get(DrUTILS.JSON_DOC_ID);
     }
 
     @Override

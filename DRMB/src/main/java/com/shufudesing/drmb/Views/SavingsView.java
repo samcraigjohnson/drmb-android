@@ -25,6 +25,7 @@ public class SavingsView extends View {
     private ShapeDrawable blueBar;
     private ShapeDrawable greenBar;
     private String dollarsLeft, timeLeft;
+    private double width;
 
     public SavingsView(Context c){
         super(c);
@@ -45,7 +46,7 @@ public class SavingsView extends View {
         TypedValue tv = new TypedValue();
         DisplayMetrics screen = getContext().getResources().getDisplayMetrics();
 
-        double width = screen.widthPixels;
+        width = screen.widthPixels;
         double height = (DrUTILS.INFO_TEXT_SIZE + 10 + DrUTILS.SAVINGS_BAR_SIZE)/2;
         int initHeight = (int) DrUTILS.ALT_SAVINGS_TEXT_SIZE+30;
 
@@ -97,6 +98,7 @@ public class SavingsView extends View {
         this.timeLeft = time;
 
         saveInfoText.setText("$"+dollarsLeft+" and " + timeLeft + " months left!");
+        saveInfoText.correctWidth((int)(width*.66));
         this.invalidate();
     }
 }

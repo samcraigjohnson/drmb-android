@@ -65,7 +65,7 @@ public class Budget extends MeteorCollection {
     }
 
     @Override
-    public void setFromJson(String json) throws IOException{
+    public void setFromJson(Map<String, Object> json){
         super.setFromJson(json);
         updateCats();
     }
