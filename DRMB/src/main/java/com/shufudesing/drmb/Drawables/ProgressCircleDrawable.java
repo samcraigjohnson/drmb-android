@@ -45,7 +45,7 @@ public class ProgressCircleDrawable extends Drawable {
         //Text to date/money display information
         infoText = new TextDrawable("LEFT TO SPEND", y+(height/2)+25);
         infoText.setTextSize(DrUTILS.INFO_TEXT_SIZE);
-        timeText = new TextDrawable("THIS MONTH", y+(height/2)+80);
+        timeText = new TextDrawable("THIS " + dateType, y+(height/2)+80);
         timeText.setTextSize(DrUTILS.INFO_TEXT_SIZE);
         moneyText = new TextDrawable("$0", y+(height/3));
         moneyText.setTextSize(DrUTILS.MONEY_TEXT_SIZE);

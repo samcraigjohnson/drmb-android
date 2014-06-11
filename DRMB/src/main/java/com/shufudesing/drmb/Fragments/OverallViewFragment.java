@@ -25,6 +25,7 @@ public class OverallViewFragment extends BaseDrFragment{
     private CatsView catsView;
     private MainView circleDash;
     private SavingsView savingsView;
+
     private final String TAG = "OverallViewFragment";
 
     public OverallViewFragment() { }
@@ -55,18 +56,21 @@ public class OverallViewFragment extends BaseDrFragment{
     }
 
     public void updateInfo(){
-        Double left = MyDDP.getInstance().getAmountLeft(DrUTILS.MONTH);
-        Double total = MyDDP.getInstance().getTotalBudget();
-        double percent = (total - left) / total;
-        Log.v(TAG, "percent spent: " + percent + "left:" + left);
+        for(String dateType: DrUTILS.DATE_TYPES) {
+            Double left = MyDDP.getInstance().getAmountLeft(dateType);
+            Double total = MyDDP.getInstance().getTotalBudget(dateType) - MyDDP.getInstance().getSaveByDate(dateType);
+            double percent = (total - left) / total;
+            Log.v(TAG, "percent spent: " + percent + "left:" + left);
+            circleDash.setPercent(dateType, new Float(percent));
 
-        String newText = left.toString();
-        Log.v(TAG, "AMOUNT OF MONEY LEFT TO SPEND THIS MONTH: " + newText);
-        circleDash.setMoneyText(newText);
-        circleDash.setPercent(new Float(percent));
+            if(dateType.equals(circleDash.getActiveDateType())) {
+                String newText = DrUTILS.formatDouble(left);
+                circleDash.setMoneyText(newText);
+            }
+        }
 
         Map<String, Category> cats = MyDDP.getInstance().getCategories();
-        for(Map.Entry<String, Category> cat: cats.entrySet()){
+        for (Map.Entry<String, Category> cat : cats.entrySet()) {
             catsView.setHeight(cat.getKey(), cat.getValue().getPercentSpent());
         }
 

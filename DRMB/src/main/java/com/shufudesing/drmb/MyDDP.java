@@ -92,7 +92,7 @@ public class MyDDP extends DDPStateSingleton {
     }
 
     public String getSavingAmountLeft(){
-        return String.valueOf(offlineStack.getSavingsGoal().getAmountLeft());
+        return DrUTILS.formatDouble(offlineStack.getSavingsGoal().getAmountLeft());
     }
 
     public String getMonthsLeft(){
@@ -108,26 +108,26 @@ public class MyDDP extends DDPStateSingleton {
         offlineStack.readData();
     }
 
-    public Double getTotalSpent(){
+    public Double getTotalSpent(String dateType){
         double total = 0;
-        Log.i(TAG, "Getting total spent: " + offlineStack.getExpenses().toString());
-        clearCats();
         for(Expense e: offlineStack.getExpenses().values()){
-            if(e.isActive().booleanValue()){
-                Log.v(TAG, "is active" + "num trans: " + e.getTransactions().size());
-                for(Transaction t: e.getTransactions()){
-                    Log.v(TAG, "Transaction amount:"+t.getAmount());
-                    total += t.getAmount();
-                    offlineStack.getBudget().getCats().get(t.getCatName()).addSpending(t.getAmount());
-                }
+            if(e.isActive()){
+                total = e.getSpendingByDate(dateType);
             }
         }
         Log.v(TAG, "total spent:" + total);
         return new Double(total);
     }
 
-    public Double getTodaySpent(){
-        return 0.0;
+    private void setUpCats(){
+        clearCats();
+        for(Expense e: offlineStack.getExpenses().values()) {
+            if (e.isActive()) {
+                for(Transaction t: e.getTransactions()){
+                    offlineStack.getBudget().getCats().get(t.getCatName()).addSpending(t.getAmount());
+                }
+            }
+        }
     }
 
     private void clearCats(){
@@ -137,14 +137,12 @@ public class MyDDP extends DDPStateSingleton {
     }
 
     public Double getAmountLeft(String dateType){
-        double left = 0;
-        if(dateType.equals(DrUTILS.MONTH)){
-            left = offlineStack.getBudget().getTotal().doubleValue() - getTotalSpent().doubleValue()
-                    - offlineStack.getBudget().getSave().doubleValue();
-        }
-
+        double left = getTotalBudget(dateType) - getTotalSpent(dateType)
+                    - getSaveByDate(dateType);
         return new Double(left);
     }
+
+
 
     public Map<String, Category> getCategories(){
         return offlineStack.getBudget().getCats();
@@ -189,20 +187,34 @@ public class MyDDP extends DDPStateSingleton {
         }
     }
 
-    public Double getTotalBudget(){
-        return offlineStack.getBudget().getTotal();
+    public Double getTotalBudget(String dateType){
+        Calendar c = Calendar.getInstance();
+        double total = offlineStack.getBudget().getTotal();
+        if(dateType.equals(DrUTILS.MONTH))
+            return total;
+        else if(dateType.equals(DrUTILS.DAY)){
+            int numDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+            return total / numDays;
+        }
+        else{
+            int numWeeks = c.getActualMaximum(Calendar.WEEK_OF_MONTH);
+            return total / numWeeks;
+        }
     }
 
-    public Double getDailyBudget(){
+    public Double getSaveByDate(String dateType){
         Calendar c = Calendar.getInstance();
-        int numDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-        return getTotalBudget() / numDays;
-    }
-
-    public Double getWeeklyBudget(){
-        Calendar c = Calendar.getInstance();
-        int numWeeks = c.getActualMaximum(Calendar.WEEK_OF_MONTH);
-        return getTotalBudget() / numWeeks;
+        double save = offlineStack.getBudget().getSave();
+        if(dateType.equals(DrUTILS.MONTH))
+            return save;
+        else if(dateType.equals(DrUTILS.DAY)){
+            int numDays = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+            return save / numDays;
+        }
+        else{
+            int numWeeks = c.getActualMaximum(Calendar.WEEK_OF_MONTH);
+            return save / numWeeks;
+        }
     }
 
     @Override
@@ -214,12 +226,12 @@ public class MyDDP extends DDPStateSingleton {
         if (collectionName.equals("expenses")) {
             if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
                 offlineStack.getExpenses().put(docId, new Expense(docId, getCollection(collectionName).get(docId)));
-                Log.v(TAG, "Number of expenses: " + offlineStack.getExpenses().size());
             } else if (changetype.equals(DDPClient.DdpMessageType.REMOVED)) {
                 offlineStack.getExpenses().remove(docId);
             } else if (changetype.equals(DDPClient.DdpMessageType.CHANGED)) {
                 offlineStack.getExpenses().get(docId).updateFields(getCollection(collectionName).get(docId));
             }
+            setUpCats();
         }
         else if(collectionName.equals("budgets")){
             if (changetype.equals(DDPClient.DdpMessageType.ADDED)) {
@@ -255,8 +267,6 @@ public class MyDDP extends DDPStateSingleton {
         }
 
         mDDP.addObserver(this);
-        //mDDP.connect();
-        //mDDPState = DDPSTATE.NotLoggedIn;
     }
 
     @Override

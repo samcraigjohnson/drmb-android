@@ -4,9 +4,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.shufudesing.drmb.Collections.MeteorCollection;
+import com.shufudesing.drmb.DrUTILS;
 
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,6 +76,46 @@ public class Expense extends MeteorCollection {
         //TODO parse javascript date to get java date
         String scriptDate = (String) mFields.get("date");
         return null;
+    }
+
+    public List<Transaction> getTransactionsByDate(String dateType){
+        List<Transaction> tTrans = new ArrayList<Transaction>();
+        DateTime now = new DateTime();
+        DateTime startOfWeek = new DateTime().withDayOfWeek(DateTimeConstants.MONDAY);
+        DateTime endOfWeek = startOfWeek.plusWeeks(1);
+
+        if(dateType.equals(DrUTILS.MONTH))
+            return getTransactions();
+
+        for(Transaction t: transactions){
+            if(dateType.equals(DrUTILS.DAY) && t.getDate().withTimeAtStartOfDay().equals(now.withTimeAtStartOfDay())){
+                tTrans.add(t);
+            }
+            else if(dateType.equals(DrUTILS.WEEK) && t.getDate().compareTo(startOfWeek) >= 0 && t.getDate().compareTo(endOfWeek) < 0){
+                tTrans.add(t);
+            }
+        }
+        return tTrans;
+    }
+
+    public double getSpendingByDate(String dateType){
+        double sAmt = 0;
+        DateTime now = new DateTime();
+        DateTime startOfWeek = new DateTime().withDayOfWeek(DateTimeConstants.MONDAY);
+        DateTime endOfWeek = startOfWeek.plusWeeks(1);
+
+        for(Transaction t: transactions){
+            if(dateType.equals(DrUTILS.MONTH)) {
+                sAmt += t.getAmount();
+            }
+            else if(dateType.equals(DrUTILS.DAY) && t.getDate().withTimeAtStartOfDay().equals(now.withTimeAtStartOfDay())){
+                sAmt += t.getAmount();
+            }
+            else if(dateType.equals(DrUTILS.WEEK) && t.getDate().compareTo(startOfWeek) >= 0 && t.getDate().compareTo(endOfWeek) < 0){
+                sAmt += t.getAmount();
+            }
+        }
+        return sAmt;
     }
 
     @Override

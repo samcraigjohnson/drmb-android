@@ -25,6 +25,7 @@ public class DrUTILS {
     public static final String MONTH = "MONTH";
     public static final String WEEK = "WEEK";
     public static final String DAY = "DAY";
+    public static final String[] DATE_TYPES = {"DAY", "WEEK", "MONTH"};
 
     //App Color constants
     public static final int GREEN = 0xff41ad48;
@@ -59,5 +60,14 @@ public class DrUTILS {
     public static final String JSON_FIELDS = "fields";
     public static final String JSON_DOC_ID = "docid";
     public static final String JSON_EXPENSES = "expenses";
+
+    public static String formatDouble(Double d){
+        String text = String.format("%.2f",d);
+        if(d % 1 == 0){
+            int leftInt = (int) d.doubleValue();
+            text = String.valueOf(leftInt);
+        }
+        return text;
+    }
 
 }
