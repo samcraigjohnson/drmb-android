@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.shufudesing.drmb.DrUTILS;
 import com.shufudesing.drmb.Drawables.TextDrawable;
+import com.shufudesing.drmb.Listeners.AddGoalClickListener;
 
 /**
  * Created by Sam on 6/6/2014.
@@ -26,6 +27,7 @@ public class SavingsView extends View {
     private ShapeDrawable greenBar;
     private String dollarsLeft, timeLeft;
     private double width;
+    private int initHeight;
 
     public SavingsView(Context c){
         super(c);
@@ -48,7 +50,7 @@ public class SavingsView extends View {
 
         width = screen.widthPixels;
         double height = (DrUTILS.INFO_TEXT_SIZE + 10 + DrUTILS.SAVINGS_BAR_SIZE)/2;
-        int initHeight = (int) DrUTILS.ALT_SAVINGS_TEXT_SIZE+30;
+        initHeight = (int) DrUTILS.ALT_SAVINGS_TEXT_SIZE+30;
 
         float actionBarHeight = 0;
         dollarsLeft = "0";
@@ -62,19 +64,21 @@ public class SavingsView extends View {
         savingsText.setTextSize(DrUTILS.ALT_SAVINGS_TEXT_SIZE);
         savingsText.setTextAlign(Paint.Align.LEFT);
 
-        saveInfoText = new TextDrawable("$"+dollarsLeft+" and " + timeLeft + " months left!", (int)(width*.66)/2, (int)height, Color.WHITE);
+        saveInfoText = new TextDrawable("ADD SAVINGS GOAL!", (int)(width*.66)/2, (int)height, Color.WHITE);
         saveInfoText.setTextSize(DrUTILS.SAVINGS_TEXT_SIZE);
         saveInfoText.setTextAlign(Paint.Align.CENTER);
-        saveInfoText.setBounds(0, initHeight, (int) (width * .66), DrUTILS.SAVINGS_BAR_SIZE + initHeight);
+        saveInfoText.setBounds(10, initHeight, (int) (width * .66), DrUTILS.SAVINGS_BAR_SIZE + initHeight);
         saveInfoText.correctWidth((int)(width*.66));
 
         blueBar = new ShapeDrawable(new RectShape());
         blueBar.getPaint().setColor(DrUTILS.BLUE);
-        blueBar.setBounds(0, initHeight, (int) (width * .66), DrUTILS.SAVINGS_BAR_SIZE + initHeight);
+        blueBar.setBounds(10, initHeight, (int) (width * .66), DrUTILS.SAVINGS_BAR_SIZE + initHeight);
 
         greenBar = new ShapeDrawable(new RectShape());
         greenBar.getPaint().setColor(DrUTILS.GREEN);
-        greenBar.setBounds(0, initHeight, (int) (width * .66),DrUTILS.SAVINGS_BAR_SIZE + initHeight);
+        greenBar.setBounds(10, initHeight, (int) (width * .66),DrUTILS.SAVINGS_BAR_SIZE + initHeight);
+
+        this.setOnClickListener(new AddGoalClickListener(this.getContext()));
     }
 
     @Override
@@ -98,7 +102,15 @@ public class SavingsView extends View {
         this.timeLeft = time;
 
         saveInfoText.setText("$"+dollarsLeft+" and " + timeLeft + " months left!");
+        saveInfoText.setBounds(0, initHeight, (int) (width * .66), DrUTILS.SAVINGS_BAR_SIZE + initHeight);
         saveInfoText.correctWidth((int)(width*.66));
+
+        blueBar.getPaint().setColor(DrUTILS.BLUE);
+        blueBar.setBounds(0, initHeight, (int) (width * .66), DrUTILS.SAVINGS_BAR_SIZE + initHeight);
+
+        greenBar.getPaint().setColor(DrUTILS.GREEN);
+        greenBar.setBounds(0, initHeight, (int) (width * .66),DrUTILS.SAVINGS_BAR_SIZE + initHeight);
+
         this.invalidate();
     }
 }

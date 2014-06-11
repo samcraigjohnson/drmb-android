@@ -1,14 +1,12 @@
 package com.shufudesing.drmb.Offline;
 
 import android.content.Context;
-
-//import android.util.JsonReader;
 import android.util.Log;
-
 
 import com.cedarsoftware.util.io.JsonObject;
 import com.cedarsoftware.util.io.JsonWriter;
 import com.cedarsoftware.util.io.JsonReader;
+
 import com.google.gson.Gson;
 import com.shufudesing.drmb.Collections.Budget;
 import com.shufudesing.drmb.Collections.Expense;
@@ -27,6 +25,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,15 +36,16 @@ import java.util.Stack;
 /**
  * Created by Sam on 6/6/2014.
  */
-public class OfflineStack {
+public class OfflineStack{
 
     private Budget budget;
     private Map<String, Expense> mExpenses;
     private SavingsGoal currGoal;
     private Stack<SavedCall> callStack;
     private Context c;
-    private final String OUTPUT_FILE = "offline_data.json";
     private final String TAG = "OfflineStack";
+    private final String OUTPUT_FILE = "out_stack";
+    private final Gson gson = new Gson();
 
     public OfflineStack(Context context){
         c = context;
@@ -87,6 +89,8 @@ public class OfflineStack {
         Log.v(TAG, "Stack Reset");
     }
 
+
+
     public void writeData(){
         FileOutputStream fos;
         try {
@@ -113,17 +117,14 @@ public class OfflineStack {
             fis = c.openFileInput(OUTPUT_FILE);
             StringWriter writer = new StringWriter();
             IOUtils.copy(fis, writer, "UTF-8");
+            JSONObject jo = new JSONObject(writer.toString());
+            if(jo.has(DrUTILS.JSON_CALL_STACK))
+                readStack(jo);
+            if(jo.has(DrUTILS.JSON_BUDGET))
+                readBudget(jo);
+            if(jo.has(DrUTILS.JSON_EXPENSES)){}
+                //readExpense((Map<String,Object>) jo.get(DrUTILS.JSON_EXPENSES));
             fis.close();
-            Gson gson = new Gson();
-            Map<String, Object> jo = gson.fromJson(writer.toString(), HashMap.class);
-            Log.v(TAG, "jo created" + jo.toString());
-            if(jo.containsKey(DrUTILS.JSON_CALL_STACK)){}
-               // readStack(jo.get(DrUTILS.JSON_CALL_STACK));
-            if(jo.containsKey(DrUTILS.JSON_BUDGET)) {}
-               // readBudget(jo.get(DrUTILS.JSON_BUDGET));
-            if(jo.containsKey(DrUTILS.JSON_EXPENSES))
-                readExpense((Map<String,Object>) jo.get(DrUTILS.JSON_EXPENSES));
-
         }
         catch (Exception e){
             e.printStackTrace();
@@ -168,9 +169,7 @@ public class OfflineStack {
     }
 
     private void writeExpenses(JsonObject jo) throws JSONException, IOException{
-        Gson gson = new Gson();
         String json = gson.toJson(mExpenses);
-        //JsonArr
         jo.put(DrUTILS.JSON_EXPENSES, json);
     }
 
@@ -190,8 +189,7 @@ public class OfflineStack {
     }
 
     private void readBudget(JSONObject jo) throws JSONException, IOException{
-        Log.v(TAG, "JO: " + jo.toString());
-        //budget.setFromJson(jo.get(DrUTILS.JSON_BUDGET).toString());
+        budget.setFromJson(jo.get(DrUTILS.JSON_BUDGET).toString());
         Log.v(TAG, "Budget Read: " + budget.toString());
     }
 }

@@ -59,6 +59,10 @@ public class MyDDP extends DDPStateSingleton {
         return (MyDDP) mInstance;
     }
 
+    public boolean isSavingsGoalActive(){
+        return offlineStack.getSavingsGoal().getActive();
+    }
+
     public List<Transaction> getTransactions(){
         List<Transaction> transactions = new ArrayList<Transaction>();
         for(Expense e: offlineStack.getExpenses().values()){
@@ -121,6 +125,11 @@ public class MyDDP extends DDPStateSingleton {
         Log.v(TAG, "total spent:" + total);
         return new Double(total);
     }
+
+    public Double getTodaySpent(){
+        return 0.0;
+    }
+
     private void clearCats(){
         for(Category cat: offlineStack.getBudget().getCats().values()){
             cat.setSpent(0d);

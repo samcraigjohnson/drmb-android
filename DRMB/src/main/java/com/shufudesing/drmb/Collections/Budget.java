@@ -18,8 +18,8 @@ import java.util.Map;
  */
 public class Budget extends MeteorCollection {
 
-    private Map<String, Category> cats;
-    private static final String TAG = "Budget";
+    private transient Map<String, Category> cats;
+    private transient static final String TAG = "Budget";
 
     public Budget() {
         super();
@@ -65,7 +65,7 @@ public class Budget extends MeteorCollection {
     }
 
     @Override
-    public void setFromJson(Map<String, Object> json){
+    public void setFromJson(String json) throws IOException{
         super.setFromJson(json);
         updateCats();
     }

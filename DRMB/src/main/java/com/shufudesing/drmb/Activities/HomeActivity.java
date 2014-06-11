@@ -182,7 +182,7 @@ public class HomeActivity extends ActionBarActivity {
             else if (pos == DrUTILS.SETTINGS) {}
                 else if (pos == DrUTILS.TIPS) {}
                 else if (pos == DrUTILS.OUTLOOK) {}
-                else if (pos == DrUTILS.SAVED_LOCATIONS) {}
+               // else if (pos == DrUTILS.SAVED_LOCATIONS) {}
 
                 String tag = fragment.getTag();
                 fManager.beginTransaction()

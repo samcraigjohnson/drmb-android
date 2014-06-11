@@ -77,7 +77,7 @@ public class Expense extends MeteorCollection {
     }
 
     @Override
-    public void setFromJson(Map<String, Object> json){
+    public void setFromJson(String json) throws IOException{
         super.setFromJson(json);
         this.updateTransactions();
     }

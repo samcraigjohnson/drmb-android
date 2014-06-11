@@ -14,6 +14,7 @@ import android.view.View;
 import com.shufudesing.drmb.DrUTILS;
 import com.shufudesing.drmb.Drawables.ArcDrawable;
 import com.shufudesing.drmb.Drawables.DateDrawable;
+import com.shufudesing.drmb.Drawables.ProgressCircleDrawable;
 import com.shufudesing.drmb.Drawables.TextDrawable;
 
 import java.util.Calendar;
@@ -22,10 +23,9 @@ import java.util.Calendar;
  * Created by Sam on 5/7/2014.
  */
 public class MainView extends View{
-    private ShapeDrawable mDrawable, greenCircle;
-    private TextDrawable infoText, moneyText, timeText;
-    private ArcDrawable arcDrawable;
-    private DateDrawable date;
+    private ProgressCircleDrawable mDrawable, dDrawable, wDrawable;
+
+    private String activeCircle = DrUTILS.MONTH;
 
     public MainView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,62 +38,37 @@ public class MainView extends View{
         int y = gcSize + 40;
         int x = (screen.widthPixels/2) - (width/2);
 
+        int leftx = (int) (width*-DrUTILS.SIDE_PERCENT);
+        int rightx = (int) (screen.widthPixels - (width*(1-DrUTILS.SIDE_PERCENT)));
 
-        //Main Circle
-        mDrawable = new ShapeDrawable(new OvalShape());
-        mDrawable.getPaint().setColor(DrUTILS.BLUE);
-        mDrawable.setBounds(x, y, x + width, y + height);
-        //Green Ring
-        greenCircle = new ShapeDrawable(new OvalShape());
-        greenCircle.getPaint().setColor(DrUTILS.GREEN);
+        //Month Circle
+        mDrawable = new ProgressCircleDrawable(x,y,DrUTILS.MONTH, true);
 
-        Rect bounds = new Rect(x-gcSize, y-gcSize, x + width+gcSize, y + height+gcSize);
+        //Day Circle
+        dDrawable = new ProgressCircleDrawable(leftx, y, DrUTILS.DAY, false);
 
-        greenCircle.setBounds(bounds);
-        //Red arc that shows progress
-        arcDrawable = new ArcDrawable(bounds);
-        //Text to date/money display information
-        infoText = new TextDrawable("LEFT TO SPEND", y+(height/2)+25);
-        infoText.setTextSize(DrUTILS.INFO_TEXT_SIZE);
-        timeText = new TextDrawable("THIS MONTH", y+(height/2)+80);
-        timeText.setTextSize(DrUTILS.INFO_TEXT_SIZE);
-        moneyText = new TextDrawable("$0", y+(height/3));
-        moneyText.setTextSize(DrUTILS.MONEY_TEXT_SIZE);
-
-        //Line to show current date and progress
-        date = new DateDrawable(DrUTILS.MONTH, bounds);
-    }
-
-
-    public void updateTime(String measure){
-        date.updateTime(measure);
-        this.invalidate();
-    }
-
-    public void setColor(int hex){
-        mDrawable.getPaint().setColor(hex);
-        this.invalidate();
+        //Week Circle
+        wDrawable = new ProgressCircleDrawable(rightx, y, DrUTILS.WEEK, false);
     }
 
     public void setMoneyText(String text){
-        moneyText.setText("$"+text);
+        mDrawable.setMoneyText(text);
         this.invalidate();
     }
 
+    public String getActiveDateType(){
+        return activeCircle;
+    }
+
     public void setPercent(float percent){
-        float angle = 360f * percent;
-        Log.v("ARC", "Drawing with angle: " + angle);
-        arcDrawable.setSweep(angle);
+        float mAngle = 360f * percent;
+        mDrawable.setSweep(mAngle);
         this.invalidate();
     }
 
     protected void onDraw(Canvas canvas) {
-        greenCircle.draw(canvas);
-        arcDrawable.draw(canvas);
+        dDrawable.draw(canvas);
         mDrawable.draw(canvas);
-        date.draw(canvas);
-        moneyText.draw(canvas);
-        infoText.draw(canvas);
-        timeText.draw(canvas);
+        wDrawable.draw(canvas);
     }
 }

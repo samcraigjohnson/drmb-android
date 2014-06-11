@@ -64,7 +64,8 @@ public class DateDrawable extends Drawable{
         Calendar c = Calendar.getInstance();
         double angle = 0;
 
-        if(time.equals(DrUTILS.MONTH)){
+        //TODO change date correctly
+        if(true || time.equals(DrUTILS.MONTH)){
             int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
             int today = c.get(Calendar.DAY_OF_MONTH);
             angle = (((double)today)/((double)maxDay) * 360) - 90d;

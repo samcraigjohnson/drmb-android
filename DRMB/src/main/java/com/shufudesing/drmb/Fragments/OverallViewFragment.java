@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class OverallViewFragment extends BaseDrFragment{
     private CatsView catsView;
-    private MainView circle;
+    private MainView circleDash;
     private SavingsView savingsView;
     private final String TAG = "OverallViewFragment";
 
@@ -40,7 +40,7 @@ public class OverallViewFragment extends BaseDrFragment{
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_overall_view_fragment, container, false);
         catsView = (CatsView) v.findViewById(R.id.catsView);
-        circle =  (MainView) v.findViewById(R.id.mainView);
+        circleDash =  (MainView) v.findViewById(R.id.mainView);
         savingsView = (SavingsView) v.findViewById(R.id.savingsView);
         checkChange();
         return v;
@@ -62,8 +62,8 @@ public class OverallViewFragment extends BaseDrFragment{
 
         String newText = left.toString();
         Log.v(TAG, "AMOUNT OF MONEY LEFT TO SPEND THIS MONTH: " + newText);
-        circle.setMoneyText(newText);
-        circle.setPercent(new Float(percent));
+        circleDash.setMoneyText(newText);
+        circleDash.setPercent(new Float(percent));
 
         Map<String, Category> cats = MyDDP.getInstance().getCategories();
         for(Map.Entry<String, Category> cat: cats.entrySet()){
@@ -73,7 +73,9 @@ public class OverallViewFragment extends BaseDrFragment{
     }
 
     public void updateSavingsGoal(){
-        savingsView.setSavingsPercent(MyDDP.getInstance().getPercentSaved());
-        savingsView.setSavingsInfo(MyDDP.getInstance().getSavingAmountLeft(), MyDDP.getInstance().getMonthsLeft());
+        if(MyDDP.getInstance().isSavingsGoalActive()) {
+            savingsView.setSavingsInfo(MyDDP.getInstance().getSavingAmountLeft(), MyDDP.getInstance().getMonthsLeft());
+            savingsView.setSavingsPercent(MyDDP.getInstance().getPercentSaved());
+        }
     }
 }

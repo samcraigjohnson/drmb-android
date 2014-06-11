@@ -14,6 +14,7 @@ public class DrUTILS {
     public static final float MONEY_TEXT_SIZE = 75f;
     public static final float CAT_BTN_TEXT_SIZE = 50f;
     public static final int LINE_LENGTH = 30;
+    public static final double SIDE_PERCENT = .9;
 
     //savings view constants
     public static final int SAVINGS_BAR_SIZE = 225;
@@ -41,11 +42,11 @@ public class DrUTILS {
 
     public static final int CAT_BTN_HEIGHT = 100;
 
-    public static final String[] DRAWER_ITEMS = {"OVERVIEW", "SAVED LOCATIONS", "HISTORY", "OUTLOOK", "TIPS", "SETTINGS"};
+    public static final String[] DRAWER_ITEMS = {"OVERVIEW", "HISTORY", "OUTLOOK", "TIPS", "SETTINGS"};
     //Positions for drawer items
     public static final int OVERVIEW = 0;
-    public static final int SAVED_LOCATIONS = 1;
-    public static final int HISTORY_POS = 2;
+   // public static final int SAVED_LOCATIONS = 1;
+    public static final int HISTORY_POS = 1;
     public static final int OUTLOOK = 2;
     public static final int TIPS = 3;
     public static final int SETTINGS = 4;
