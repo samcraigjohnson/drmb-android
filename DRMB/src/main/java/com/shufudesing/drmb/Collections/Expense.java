@@ -100,22 +100,36 @@ public class Expense extends MeteorCollection {
 
     public double getSpendingByDate(String dateType){
         double sAmt = 0;
-        DateTime now = new DateTime();
-        DateTime startOfWeek = new DateTime().withDayOfWeek(DateTimeConstants.MONDAY);
-        DateTime endOfWeek = startOfWeek.plusWeeks(1);
-
         for(Transaction t: transactions){
             if(dateType.equals(DrUTILS.MONTH)) {
                 sAmt += t.getAmount();
             }
-            else if(dateType.equals(DrUTILS.DAY) && t.getDate().withTimeAtStartOfDay().equals(now.withTimeAtStartOfDay())){
+            else if(dateType.equals(DrUTILS.DAY) && isToday(t.getDate())){
                 sAmt += t.getAmount();
             }
-            else if(dateType.equals(DrUTILS.WEEK) && t.getDate().compareTo(startOfWeek) >= 0 && t.getDate().compareTo(endOfWeek) < 0){
+            else if(dateType.equals(DrUTILS.WEEK) && isThisWeek(t.getDate())){
                 sAmt += t.getAmount();
             }
         }
         return sAmt;
+    }
+
+    private boolean isToday(DateTime t){
+        DateTime now = new DateTime();
+        if(t.getDayOfYear() == now.getDayOfYear() && t.getYear() == now.getYear()){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isThisWeek(DateTime t){
+        DateTime startOfWeek = new DateTime().withDayOfWeek(DateTimeConstants.MONDAY);
+        DateTime endOfWeek = startOfWeek.plusWeeks(1);
+        if(t.compareTo(startOfWeek) >= 0 && t.compareTo(endOfWeek) < 0) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override

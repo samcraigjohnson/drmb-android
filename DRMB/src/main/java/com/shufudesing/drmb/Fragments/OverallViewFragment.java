@@ -60,7 +60,7 @@ public class OverallViewFragment extends BaseDrFragment{
             Double left = MyDDP.getInstance().getAmountLeft(dateType);
             Double total = MyDDP.getInstance().getTotalBudget(dateType) - MyDDP.getInstance().getSaveByDate(dateType);
             double percent = (total - left) / total;
-            Log.v(TAG, "percent spent: " + percent + "left:" + left);
+            Log.v(TAG, "DateType: " + dateType+ ", percent spent: " + percent + " left:" + left);
             circleDash.setPercent(dateType, new Float(percent));
 
             if(dateType.equals(circleDash.getActiveDateType())) {

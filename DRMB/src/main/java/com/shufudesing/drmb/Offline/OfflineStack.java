@@ -95,12 +95,15 @@ public class OfflineStack{
         FileOutputStream fos;
         try {
             JsonObject jo2 = new JsonObject();
-            if(callStack.size() > 0)
+            if(callStack.size() > 0) {
                 writeStack(jo2);
-            if(budget.getFields().size() > 0)
+            }
+            if(budget.getFields().size() > 0) {
                 writeBudget(jo2);
-            if(mExpenses.size() > 0){}
+            }
+            if(mExpenses.size() > 0) {
                 writeExpenses(jo2);
+            }
 
             fos = c.openFileOutput(OUTPUT_FILE, Context.MODE_PRIVATE);
             fos.write(jo2.toString().getBytes());
@@ -118,10 +121,12 @@ public class OfflineStack{
             StringWriter writer = new StringWriter();
             IOUtils.copy(fis, writer, "UTF-8");
             JSONObject jo = new JSONObject(writer.toString());
-            if(jo.has(DrUTILS.JSON_CALL_STACK))
+            if(jo.has(DrUTILS.JSON_CALL_STACK)) {
                 readStack(jo);
-            if(jo.has(DrUTILS.JSON_BUDGET))
+            }
+            if(jo.has(DrUTILS.JSON_BUDGET)) {
                 readBudget(jo);
+            }
             if(jo.has(DrUTILS.JSON_EXPENSES)){}
                 //readExpense((Map<String,Object>) jo.get(DrUTILS.JSON_EXPENSES));
             fis.close();

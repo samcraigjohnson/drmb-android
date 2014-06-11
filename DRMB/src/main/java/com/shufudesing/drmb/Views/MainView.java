@@ -5,9 +5,14 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import com.shufudesing.drmb.DrUTILS;
 import com.shufudesing.drmb.Drawables.ProgressCircleDrawable;
+import com.shufudesing.drmb.Fragments.OverallViewFragment;
+import com.shufudesing.drmb.Listeners.MyGestureDetector;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +23,7 @@ public class MainView extends View{
     private Map<String, ProgressCircleDrawable> circles;
     private String activeCircle = DrUTILS.MONTH;
     private final String TAG = "CircleView";
+    private GestureDetector gDetect;
 
     public MainView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -38,6 +44,17 @@ public class MainView extends View{
         circles.put(DrUTILS.DAY, new ProgressCircleDrawable(leftX, y, DrUTILS.DAY, false));
         //Week Circle
         circles.put(DrUTILS.WEEK, new ProgressCircleDrawable(rightX, y, DrUTILS.WEEK, false));
+
+        gDetect = new GestureDetector(context, new MyGestureDetector());
+        OnTouchListener gListen = new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                return gDetect.onTouchEvent(event);
+            }
+        };
+
+        this.setOnTouchListener(gListen);
+
     }
 
     public void setMoneyText(String text){

@@ -115,7 +115,7 @@ public class MyDDP extends DDPStateSingleton {
                 total = e.getSpendingByDate(dateType);
             }
         }
-        Log.v(TAG, "total spent:" + total);
+        Log.v(TAG, "DateType: "+ dateType+" total spent:" + total);
         return new Double(total);
     }
 
