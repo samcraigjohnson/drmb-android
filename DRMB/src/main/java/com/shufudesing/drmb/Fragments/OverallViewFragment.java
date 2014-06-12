@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
 import com.shufudesing.drmb.Collections.Category;
 import com.shufudesing.drmb.DrUTILS;
 import com.shufudesing.drmb.MyDDP;
@@ -25,7 +27,7 @@ public class OverallViewFragment extends BaseDrFragment{
     private CatsView catsView;
     private MainView circleDash;
     private SavingsView savingsView;
-
+    private LinearLayout ll;
     private final String TAG = "OverallViewFragment";
 
     public OverallViewFragment() { }
@@ -40,6 +42,7 @@ public class OverallViewFragment extends BaseDrFragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_overall_view_fragment, container, false);
+        ll = (LinearLayout) v.findViewById(R.id.linLayout);
         catsView = (CatsView) v.findViewById(R.id.catsView);
         circleDash =  (MainView) v.findViewById(R.id.mainView);
         savingsView = (SavingsView) v.findViewById(R.id.savingsView);

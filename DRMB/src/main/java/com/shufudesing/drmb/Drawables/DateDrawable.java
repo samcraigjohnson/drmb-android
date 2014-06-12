@@ -64,12 +64,28 @@ public class DateDrawable extends Drawable{
         Calendar c = Calendar.getInstance();
         double angle = 0;
 
-        //TODO change date correctly
-        if(true || time.equals(DrUTILS.MONTH)){
+        if(time.equals(DrUTILS.MONTH)){
             int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
             int today = c.get(Calendar.DAY_OF_MONTH);
             angle = (((double)today)/((double)maxDay) * 360) - 90d;
             text = new SimpleDateFormat("MMM d").format(c.getTime());
+        }
+        else if(time.equals(DrUTILS.DAY))
+        {
+            int maxTime = 24;
+            double hour = c.get(Calendar.HOUR_OF_DAY);
+            double min = c.get(Calendar.MINUTE);
+            double percent = ((hour + (min/60)) / 24) * 360;
+            angle = percent - 90d;
+            text = new SimpleDateFormat("hh:mm").format(c.getTime());
+        }
+        else{
+            int maxTime = 7;
+            int day = c.get(Calendar.DAY_OF_WEEK);
+            Log.v(TAG, "day number: " + day);
+            double percent = ((double)day/(double)maxTime) * 360;
+            angle = percent - 90d;
+            text = new SimpleDateFormat("EEE").format(c.getTime());
         }
 
         int sRadius = (int) (DrUTILS.CIRCLE_SIZE + DrUTILS.RING_SIZE)/2 - DrUTILS.LINE_LENGTH;

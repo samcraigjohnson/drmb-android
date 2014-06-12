@@ -14,7 +14,8 @@ public class DrUTILS {
     public static final float MONEY_TEXT_SIZE = 75f;
     public static final float CAT_BTN_TEXT_SIZE = 50f;
     public static final int LINE_LENGTH = 30;
-    public static final double SIDE_PERCENT = .9;
+    public static final int SCREEN_OFFSET = 800;
+    public static final int CIRCLE_OFFSET = 100 + CIRCLE_SIZE + RING_SIZE;
 
     //savings view constants
     public static final int SAVINGS_BAR_SIZE = 225;

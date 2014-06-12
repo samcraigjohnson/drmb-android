@@ -4,6 +4,8 @@
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.cedarsoftware/json-io/2.6.0/f70d5b65b93f2cb97d63ce0f63fc220b44618df6/json-io-2.6.0.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.cedarsoftware/json-io/2.6.0/6696a6aed2ace9a0758499a258f1500c4a8bf191/json-io-2.6.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
