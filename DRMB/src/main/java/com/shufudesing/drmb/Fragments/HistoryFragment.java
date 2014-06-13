@@ -14,13 +14,14 @@ import android.widget.Spinner;
 import com.shufudesing.drmb.Collections.Transaction;
 import com.shufudesing.drmb.MyDDP;
 import com.shufudesing.drmb.R;
+import com.shufudesing.drmb.TransactionListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class HistoryFragment extends BaseDrFragment {
-    private Spinner spinner;
+   // private Spinner spinner;
     private ListView transactionView;
     private List<Transaction> trans = new ArrayList<Transaction>();
 
@@ -38,14 +39,11 @@ public class HistoryFragment extends BaseDrFragment {
         checkChange();
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_history, container, false);
-        spinner = (Spinner) v.findViewById(R.id.cat_spinner);
+       // spinner = (Spinner) v.findViewById(R.id.cat_spinner);
         transactionView = (ListView) v.findViewById(R.id.transaction_list);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(v.getContext(), R.array.cats_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
 
-        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, (List) trans);
+        ArrayAdapter<Transaction> listAdapter = new TransactionListAdapter(v.getContext(), trans);
         transactionView.setAdapter(listAdapter);
         return v;
     }

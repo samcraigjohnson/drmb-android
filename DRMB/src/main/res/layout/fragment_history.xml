@@ -5,13 +5,10 @@
     android:orientation="vertical"
     tools:context="com.shufudesing.drmb.Fragments.HistoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <Spinner
-        android:id="@+id/cat_spinner"
+    <com.shufudesing.drmb.Views.HistoryFilterView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
     <ListView
         android:id="@+id/transaction_list"
         android:layout_width="fill_parent"

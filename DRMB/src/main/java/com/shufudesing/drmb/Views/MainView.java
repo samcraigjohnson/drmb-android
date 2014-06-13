@@ -131,6 +131,7 @@ public class MainView extends View implements Animation.AnimationListener{
 
     @Override
     public void onAnimationEnd(Animation animation) {
+        Log.v(TAG, "Animation ended. Calling invalidate");
         this.invalidate();
     }
 

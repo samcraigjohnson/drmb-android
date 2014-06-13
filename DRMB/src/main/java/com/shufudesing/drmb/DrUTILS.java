@@ -22,8 +22,13 @@ public class DrUTILS {
     public static final float SAVINGS_TEXT_SIZE = 45f;
     public static final float ALT_SAVINGS_TEXT_SIZE = 35f;
 
+    //history filter bar
+    public static final int FILTER_BAR_SIZE = 150;
+
     //popup contants
     public static final int POP_MARGIN = 100;
+    public static final int X_TOP_OFFSET = 20;
+    public static final int X_LINE_LENGTH = X_TOP_OFFSET + 50;
 
     //time constants
     public static final String MONTH = "MONTH";
@@ -32,10 +37,10 @@ public class DrUTILS {
     public static final String[] DATE_TYPES = {"DAY", "WEEK", "MONTH"};
 
     //App Color constants
-    public static final int GREEN = 0xff41ad48;
-    public static final int RED = 0xffed726b;
-    public static final int BLUE = 0xff5da4da;
-    public static final int ORANGE = 0xfff9b814;
+    public static final int GREEN = 0xff58C45F;
+    public static final int RED = 0xffFF7F78;
+    public static final int BLUE = 0xff54BBFF;
+    public static final int ORANGE = 0xffFFC32B;
     public static final int GRAY = 0xff343436;
 
     //Category bar constants
