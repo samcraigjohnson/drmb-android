@@ -22,6 +22,9 @@ public class DrUTILS {
     public static final float SAVINGS_TEXT_SIZE = 45f;
     public static final float ALT_SAVINGS_TEXT_SIZE = 35f;
 
+    //popup contants
+    public static final int POP_MARGIN = 100;
+
     //time constants
     public static final String MONTH = "MONTH";
     public static final String WEEK = "WEEK";

@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.shufudesing.drmb.DrDDPManager;
 import com.shufudesing.drmb.DrUTILS;
 import com.shufudesing.drmb.Fragments.BaseDrFragment;
+import com.shufudesing.drmb.Fragments.BasePopupFragment;
 import com.shufudesing.drmb.Fragments.HistoryFragment;
 import com.shufudesing.drmb.Listeners.DrawerItemClickListener;
 import com.shufudesing.drmb.Fragments.OverallViewFragment;
@@ -52,8 +53,10 @@ public class HomeActivity extends ActionBarActivity {
         fragments = new BaseDrFragment[DrUTILS.DRAWER_ITEMS.length];
         BaseDrFragment mainFragment = new OverallViewFragment();
         BaseDrFragment historyFragment = new HistoryFragment();
+        BaseDrFragment outlook = new BasePopupFragment();
         fragments[DrUTILS.OVERVIEW] = mainFragment;
         fragments[DrUTILS.HISTORY_POS] = historyFragment;
+        fragments[DrUTILS.OUTLOOK] = outlook;
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -177,18 +180,24 @@ public class HomeActivity extends ActionBarActivity {
             if (pos == DrUTILS.HISTORY_POS) {
                     fragment = fragments[DrUTILS.HISTORY_POS];
                     title = "History";
-            }
-
-            else if (pos == DrUTILS.SETTINGS) {}
-                else if (pos == DrUTILS.TIPS) {}
-                else if (pos == DrUTILS.OUTLOOK) {}
-               // else if (pos == DrUTILS.SAVED_LOCATIONS) {}
-
-                String tag = fragment.getTag();
-                fManager.beginTransaction()
+                    String tag = fragment.getTag();
+                    fManager.beginTransaction()
                         .replace(R.id.container, fragment, tag)
                         .addToBackStack(tag)
                         .commit();
+            }
+
+            else if (pos == DrUTILS.SETTINGS) {}
+            else if (pos == DrUTILS.TIPS) {}
+            else if (pos == DrUTILS.OUTLOOK) {
+                fragment = fragments[DrUTILS.OUTLOOK];
+                fManager.beginTransaction()
+                        .add(R.id.container, fragment, fragment.getTag())
+                        .commit();
+            }
+               // else if (pos == DrUTILS.SAVED_LOCATIONS) {}
+
+
         }
 
         mDrawerList.setItemChecked(pos, true);

@@ -33,6 +33,7 @@ public class MainView extends View implements Animation.AnimationListener{
     private GestureDetector gDetect;
     private int leftX, rightX, width, x, y;
     private DisplayMetrics screen;
+    private boolean isLeft = false;
 
 
     public MainView(Context context, AttributeSet attrs) {
@@ -68,8 +69,8 @@ public class MainView extends View implements Animation.AnimationListener{
 
     }
 
-    public void setMoneyText(String text){
-        circles.get(activeCircle).setMoneyText(text);
+    public void setMoneyText(String dateType, String text){
+        circles.get(dateType).setMoneyText(text);
         this.invalidate();
     }
 
@@ -98,6 +99,11 @@ public class MainView extends View implements Animation.AnimationListener{
         for(ProgressCircleDrawable pcd: circles.values()){
             pcd.draw(canvas);
         }
+    }
+
+    public void updateTime(){
+        circles.get(activeCircle).updateTime();
+        //this.invalidate();
     }
 
     public void swipeRight(){

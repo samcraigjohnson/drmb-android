@@ -1,6 +1,10 @@
 package com.shufudesing.drmb.Fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,26 +31,42 @@ public class OverallViewFragment extends BaseDrFragment{
     private CatsView catsView;
     private MainView circleDash;
     private SavingsView savingsView;
-    private LinearLayout ll;
+    private BroadcastReceiver timeReceiver;
     private final String TAG = "OverallViewFragment";
 
     public OverallViewFragment() { }
     @Override
     public void onCreate(Bundle savedInstanceState){super.onCreate(savedInstanceState);}
     @Override
-    public void onResume(){ super.onResume();}
+    public void onResume(){
+        super.onResume();
+    }
     @Override
-    public void onPause(){ super.onPause();}
+    public void onPause(){
+        super.onPause();
+        if(timeReceiver != null){
+            getActivity().unregisterReceiver(timeReceiver);
+            timeReceiver = null;
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_overall_view_fragment, container, false);
-        ll = (LinearLayout) v.findViewById(R.id.linLayout);
         catsView = (CatsView) v.findViewById(R.id.catsView);
         circleDash =  (MainView) v.findViewById(R.id.mainView);
         savingsView = (SavingsView) v.findViewById(R.id.savingsView);
         checkChange();
+        timeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0 ){
+                    circleDash.updateTime();
+                }
+            }
+        };
+        getActivity().registerReceiver(timeReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
         return v;
     }
 
@@ -65,11 +85,9 @@ public class OverallViewFragment extends BaseDrFragment{
             double percent = (total - left) / total;
             Log.v(TAG, "DateType: " + dateType+ ", percent spent: " + percent + " left:" + left);
             circleDash.setPercent(dateType, new Float(percent));
+            String newText = DrUTILS.formatDouble(left);
+            circleDash.setMoneyText(dateType, newText);
 
-            if(dateType.equals(circleDash.getActiveDateType())) {
-                String newText = DrUTILS.formatDouble(left);
-                circleDash.setMoneyText(newText);
-            }
         }
 
         Map<String, Category> cats = MyDDP.getInstance().getCategories();

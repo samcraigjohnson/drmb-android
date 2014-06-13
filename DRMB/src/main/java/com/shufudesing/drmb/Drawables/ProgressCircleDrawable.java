@@ -98,6 +98,11 @@ public class ProgressCircleDrawable extends Drawable {
         date = new DateDrawable(dateType, bounds);
     }
 
+    public void updateTime(){
+
+        //date.updateTime(dateType);
+        //this.invalidateSelf();
+    }
     public void setMoneyText(String text){
         moneyText.setText("$"+text);
     }

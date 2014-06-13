@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MyDDP extends DDPStateSingleton {
 
-    private static final String mDRMBServer = "192.168.1.2";
+    private static final String mDRMBServer = "192.168.1.5";
     private static final Integer mDRMBPort = 3000;
     private static final String TAG = "MyDDP";
     private OfflineStack offlineStack;
@@ -139,6 +139,7 @@ public class MyDDP extends DDPStateSingleton {
     public Double getAmountLeft(String dateType){
         double left = getTotalBudget(dateType) - getTotalSpent(dateType)
                     - getSaveByDate(dateType);
+        Log.v(TAG, "amount left: " + left + " datetype: " + dateType);
         return new Double(left);
     }
 
