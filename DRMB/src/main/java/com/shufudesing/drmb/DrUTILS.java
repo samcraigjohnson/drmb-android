@@ -7,6 +7,9 @@ import java.sql.Struct;
  */
 public class DrUTILS {
 
+    //Intent contants
+    public static final String CHANGED_FILTER = "com.shufuinc.drmb.CHANGED_FILTER";
+
     //Circle constants
     public static final int CIRCLE_SIZE = 390;
     public static final int RING_SIZE = 35;
@@ -24,6 +27,12 @@ public class DrUTILS {
 
     //history filter bar
     public static final int FILTER_BAR_SIZE = 150;
+    public static final int FILTER_TRI_OFFSET = 25;
+    public static final String[] DISPLAY_FILTERS = {"B Y  C A T E G O R Y", "B Y  D A T E", "B Y  L O W E S T  A M O U N T", "B Y  H I G H E S T  A M O U N T"};
+    public static final int BY_CAT = 0;
+    public static final int BY_DATE = 1;
+    public static final int BY_LOWEST = 2;
+    public static final int BY_HIGHTEST = 3;
 
     //popup contants
     public static final int POP_MARGIN = 100;

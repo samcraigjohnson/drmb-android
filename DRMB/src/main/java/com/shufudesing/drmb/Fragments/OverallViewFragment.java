@@ -62,7 +62,7 @@ public class OverallViewFragment extends BaseDrFragment{
             @Override
             public void onReceive(Context context, Intent intent) {
                 if(intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0 ){
-                    circleDash.updateTime();
+                    //circleDash.updateTime();
                 }
             }
         };
@@ -87,9 +87,9 @@ public class OverallViewFragment extends BaseDrFragment{
             circleDash.setPercent(dateType, new Float(percent));
             String newText = DrUTILS.formatDouble(left);
             circleDash.setMoneyText(dateType, newText);
-
         }
 
+        MyDDP.getInstance().setUpCats();
         Map<String, Category> cats = MyDDP.getInstance().getCategories();
         for (Map.Entry<String, Category> cat : cats.entrySet()) {
             catsView.setHeight(cat.getKey(), cat.getValue().getPercentSpent());

@@ -17,6 +17,8 @@ import com.shufudesing.drmb.Collections.Expense;
 import com.shufudesing.drmb.Collections.MeteorCollection;
 import com.shufudesing.drmb.Collections.SavingsGoal;
 import com.shufudesing.drmb.Collections.Transaction;
+import com.shufudesing.drmb.Comparators.AmountComparator;
+import com.shufudesing.drmb.Comparators.DateComparator;
 import com.shufudesing.drmb.Offline.OfflineStack;
 import com.shufudesing.drmb.Offline.SavedCall;
 
@@ -64,13 +66,28 @@ public class MyDDP extends DDPStateSingleton {
     }
 
     public List<Transaction> getTransactions(){
+        return getTransactionsBy(DrUTILS.BY_DATE);
+    }
+
+    public List<Transaction> getTransactionsBy(int by){
         List<Transaction> transactions = new ArrayList<Transaction>();
         for(Expense e: offlineStack.getExpenses().values()){
             for(Transaction t: e.getTransactions()){
                 transactions.add(t);
             }
         }
-        Collections.sort(transactions);
+
+        if(by == DrUTILS.BY_HIGHTEST){
+            Collections.sort(transactions, new AmountComparator());
+            Collections.reverse(transactions);
+        }
+        else if(by == DrUTILS.BY_LOWEST){
+            Collections.sort(transactions, new AmountComparator());
+        }
+        else{
+            Collections.sort(transactions, new DateComparator());
+        }
+
         return transactions;
     }
 
@@ -119,7 +136,7 @@ public class MyDDP extends DDPStateSingleton {
         return new Double(total);
     }
 
-    private void setUpCats(){
+    public void setUpCats(){
         clearCats();
         for(Expense e: offlineStack.getExpenses().values()) {
             if (e.isActive()) {

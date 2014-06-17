@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 /**
  * Created by Sam on 5/13/2014.
  */
-public class Transaction implements Comparable<Transaction>{
+public class Transaction{
 
     private final String TAG = "Transaction";
     private String description, cat;
@@ -21,15 +21,6 @@ public class Transaction implements Comparable<Transaction>{
         Log.v(TAG, "Date: " + date);
         this.date = date;
 
-    }
-    @Override
-    public int compareTo(Transaction t) {
-        if(date.isBefore(t.getDate().toInstant())){
-            return 1;
-        }
-        else{
-            return -1;
-        }
     }
 
     @Override

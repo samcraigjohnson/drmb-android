@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.TypedValue;
 
 
@@ -70,10 +71,14 @@ public class TextDrawable extends Drawable{
     }
 
     public void correctWidth(int desiredWidth){
-        float currentSize = paint.getTextSize();
-        Rect bounds = new Rect();
-        paint.getTextBounds(text, 0, text.length(), bounds);
+        correctWidth(paint.getTextSize(), desiredWidth);
+    }
 
+    public void correctWidth(float desiredSize, int desiredWidth){
+        float currentSize = desiredSize;
+        Rect bounds = new Rect();
+        paint.setTextSize(currentSize);
+        paint.getTextBounds(text, 0, text.length(), bounds);
         while(bounds.width() > desiredWidth){
             currentSize--;
             paint.setTextSize(currentSize);
