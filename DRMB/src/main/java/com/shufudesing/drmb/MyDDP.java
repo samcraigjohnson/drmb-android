@@ -141,7 +141,9 @@ public class MyDDP extends DDPStateSingleton {
         for(Expense e: offlineStack.getExpenses().values()) {
             if (e.isActive()) {
                 for(Transaction t: e.getTransactions()){
-                    offlineStack.getBudget().getCats().get(t.getCatName()).addSpending(t.getAmount());
+                    Category c = offlineStack.getBudget().getCats().get(t.getCatName());
+                    c.addSpending(t.getAmount());
+                    c.addTransaction(t);
                 }
             }
         }

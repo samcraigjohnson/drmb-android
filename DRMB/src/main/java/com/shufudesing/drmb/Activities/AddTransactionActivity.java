@@ -28,7 +28,7 @@ import com.shufudesing.drmb.Views.SpendCategoryView;
 public class AddTransactionActivity  extends ActionBarActivity{
 
     private final String TAG = "Add Transaction";
-    private EditText amount,location,description;
+    private EditText description;
     private SpendCategoryView categoryView;
     private PriceInputView pView;
     private BroadcastReceiver mReceiver;
@@ -38,7 +38,7 @@ public class AddTransactionActivity  extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_transaction);
         pView = (PriceInputView) this.findViewById(R.id.priceView);
-        location = (EditText) this.findViewById(R.id.location);
+        //location = (EditText) this.findViewById(R.id.location);
         description = (EditText) this.findViewById(R.id.description);
         categoryView = (SpendCategoryView) this.findViewById(R.id.categoryView);
     }
@@ -94,9 +94,9 @@ public class AddTransactionActivity  extends ActionBarActivity{
     private void submitExpense(){
         double amountVal = pView.getAmount();
         String descripVal = description.getText().toString();
-        String locationVal = location.getText().toString();
+       // String locationVal = location.getText().toString();
         String category = categoryView.getSelectedCategory();
-        Log.v(TAG, amountVal+":"+descripVal+":"+locationVal+":"+category);
+       // Log.v(TAG, amountVal+":"+descripVal+":"+locationVal+":"+category);
         boolean sent = MyDDP.getInstance().addExpense(amountVal, category, descripVal);
         if(!sent){
             finish();

@@ -50,6 +50,10 @@ public class TextDrawable extends Drawable{
         paint.setTextAlign(Paint.Align.LEFT);
     }
 
+    public Paint getPaint(){
+        return paint;
+    }
+
     public void setTextSize(float size){
         paint.setTextSize(size);
     }

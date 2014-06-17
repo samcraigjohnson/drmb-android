@@ -24,20 +24,11 @@
         />
 
     <EditText
-        android:id="@+id/location"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:inputType="text"
-        android:layout_weight=".5"
-        android:hint="Location"
-        android:layout_marginBottom="5dp"/>
-
-    <EditText
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:inputType="text"
-        android:layout_weight=".5"
+        android:layout_weight=".75"
         android:hint="Description"/>
 
     <com.shufudesing.drmb.Views.SpendCategoryView

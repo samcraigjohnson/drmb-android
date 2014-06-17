@@ -22,6 +22,7 @@ import com.shufudesing.drmb.DrUTILS;
 import com.shufudesing.drmb.MyDDP;
 import com.shufudesing.drmb.R;
 import com.shufudesing.drmb.TransactionListAdapter;
+import com.shufudesing.drmb.Views.CategoryHistoryView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class HistoryFragment extends BaseDrFragment{
     private BroadcastReceiver mReceiver;
     private final String TAG = "HistoryFragment";
     private int pos = DrUTILS.BY_CAT;
+    private ViewGroup container;
 
     public HistoryFragment() {}
     @Override
@@ -56,6 +58,7 @@ public class HistoryFragment extends BaseDrFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         checkChange();
+        this.container = container;
         // Inflate the layout for this fragment
         final View v =  inflater.inflate(R.layout.fragment_history, container, false);
         transactionView = (ListView) v.findViewById(R.id.transaction_list);
@@ -91,9 +94,15 @@ public class HistoryFragment extends BaseDrFragment{
     private void changePosition(View v, int pos){
         this.pos = pos;
         if(hasInfo){
-            trans = MyDDP.getInstance().getTransactionsBy(pos);
-            ArrayAdapter<Transaction> listAdapter = new TransactionListAdapter(v.getContext(), trans);
-            transactionView.setAdapter(listAdapter);
+            if(pos != DrUTILS.BY_CAT) {
+                trans = MyDDP.getInstance().getTransactionsBy(pos);
+                ArrayAdapter<Transaction> listAdapter = new TransactionListAdapter(v.getContext(), trans);
+                transactionView.setAdapter(listAdapter);
+            }
+            else{
+                container.removeView(transactionView);
+                container.addView(new CategoryHistoryView(container.getContext()));
+            }
         }
         else{
             Log.v(TAG, "no info");
