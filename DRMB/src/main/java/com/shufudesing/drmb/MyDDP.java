@@ -136,6 +136,10 @@ public class MyDDP extends DDPStateSingleton {
         return new Double(total);
     }
 
+    public Category getCat(String name){
+        return offlineStack.getBudget().getCats().get(name);
+    }
+
     public void setUpCats(){
         clearCats();
         for(Expense e: offlineStack.getExpenses().values()) {
@@ -151,7 +155,7 @@ public class MyDDP extends DDPStateSingleton {
 
     private void clearCats(){
         for(Category cat: offlineStack.getBudget().getCats().values()){
-            cat.setSpent(0d);
+            cat.resetCat();
         }
     }
 

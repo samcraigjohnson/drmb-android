@@ -1,6 +1,7 @@
 package com.shufudesing.drmb.Views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
@@ -10,6 +11,7 @@ import android.view.View;
 
 import com.shufudesing.drmb.DrUTILS;
 import com.shufudesing.drmb.Drawables.TextDrawable;
+import com.shufudesing.drmb.R;
 
 /**
  * Created by Sam on 6/17/2014.
@@ -17,6 +19,8 @@ import com.shufudesing.drmb.Drawables.TextDrawable;
 public class HeaderView extends View{
     private TextDrawable headerText;
     private ShapeDrawable headerRect;
+    private String text = "";
+    public int position;
 
     public HeaderView(Context context) {
         super(context);
@@ -25,6 +29,17 @@ public class HeaderView extends View{
 
     public HeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.HeaderView,
+                0, 0);
+
+        try {
+            text = a.getString(R.styleable.HeaderView_header_text);
+            position = a.getInt(R.styleable.HeaderView_view_position, 0);
+        } finally {
+            a.recycle();
+        }
         init();
     }
 
@@ -40,7 +55,8 @@ public class HeaderView extends View{
         headerRect.setBounds(0,0,width, DrUTILS.CAT_HEADER_HEIGHT);
         headerRect.getPaint().setColor(DrUTILS.BLUE);
 
-        headerText = new TextDrawable("F U N", DrUTILS.CAT_HEADER_HEIGHT/2);
+        headerText = new TextDrawable(text, DrUTILS.CAT_HEADER_HEIGHT/2 + 10);
+        headerText.setTextSize(40f);
     }
 
     @Override

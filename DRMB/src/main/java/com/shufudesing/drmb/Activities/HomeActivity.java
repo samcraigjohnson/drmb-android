@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
+import android.nfc.Tag;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
@@ -43,6 +44,8 @@ public class HomeActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mToggle;
     private final String TAG = "Home Activity";
     private BaseDrFragment[] fragments;
+    private Fragment currentFragment;
+    private int currPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,8 @@ public class HomeActivity extends ActionBarActivity {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, fragments[DrUTILS.OVERVIEW])
                     .commit();
+            currentFragment = fragments[DrUTILS.OVERVIEW];
+            currPos = DrUTILS.OVERVIEW;
         }
 
         mDrawer = (DrawerLayout) this.findViewById(R.id.drawer_layout);
@@ -164,44 +169,52 @@ public class HomeActivity extends ActionBarActivity {
 
 
     public void selectItem(int pos){
-        Log.v(TAG, "pos: " + pos);
-        Fragment fragment = null;
-        String title = "";
-        FragmentManager fManager = getFragmentManager();
+        if(pos != currPos) {
+            currPos = pos;
+            Log.v(TAG, "pos: " + pos);
+            Fragment fragment = null;
+            String title = "";
+            FragmentManager fManager = getFragmentManager();
+            Log.v(TAG, "Starting Fragment Exchange");
 
-        if(pos == DrUTILS.OVERVIEW){
-            fragment = fragments[DrUTILS.OVERVIEW];
-            fManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            fManager.beginTransaction()
-                    .replace(R.id.container, fragment, fragment.getTag())
-                    .commit();
-        }
-        else{
-            if (pos == DrUTILS.HISTORY_POS) {
-                    fragment = fragments[DrUTILS.HISTORY_POS];
-                    title = "History";
-                    String tag = fragment.getTag();
-                    fManager.beginTransaction()
-                        .replace(R.id.container, fragment, tag)
-                        .addToBackStack(tag)
-                        .commit();
-            }
+            if (pos == DrUTILS.OVERVIEW) {
+                Log.v(TAG, "ADDING OVERVIEW FRAGMENT");
+                fragment = fragments[DrUTILS.OVERVIEW];
+                //fManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-            else if (pos == DrUTILS.SETTINGS) {}
-            else if (pos == DrUTILS.TIPS) {}
-            else if (pos == DrUTILS.OUTLOOK) {
-                fragment = fragments[DrUTILS.OUTLOOK];
+                fManager.beginTransaction().remove(currentFragment).commit();
                 fManager.beginTransaction()
                         .add(R.id.container, fragment, fragment.getTag())
                         .commit();
             }
-               // else if (pos == DrUTILS.SAVED_LOCATIONS) {}
-
-
+            else if (pos == DrUTILS.HISTORY_POS) {
+                    Log.v(TAG, "ADDING HISTORY FRAGMENT");
+                    fragment = fragments[DrUTILS.HISTORY_POS];
+                    title = "History";
+                    String tag = fragment.getTag();
+                    fManager.beginTransaction().remove(currentFragment).commit();
+                    fManager.beginTransaction()
+                            .add(R.id.container, fragment, tag)
+                            .addToBackStack(tag)
+                            .commit();
+                }
+            else if (pos == DrUTILS.SETTINGS) {
+                }
+            else if (pos == DrUTILS.TIPS) {
+                }
+            else if (pos == DrUTILS.OUTLOOK) {
+                    Log.v(TAG, "ADDING OUTLOOK FRAGMENT");
+                    fragment = fragments[DrUTILS.OUTLOOK];
+                    fManager.beginTransaction()
+                            .add(R.id.container, fragment, fragment.getTag())
+                            .commit();
+                }
+                // else if (pos == DrUTILS.SAVED_LOCATIONS) {}
+            currentFragment = fragment;
+            getActionBar().setTitle(title);
+            mDrawerList.setItemChecked(pos, true);
         }
-
-        mDrawerList.setItemChecked(pos, true);
-        getActionBar().setTitle(title);
+        Log.v(TAG, "DOne ADDING FRAGMENT");
         mDrawer.closeDrawer(mDrawerList);
     }
 

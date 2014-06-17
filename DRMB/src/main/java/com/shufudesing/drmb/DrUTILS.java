@@ -33,7 +33,7 @@ public class DrUTILS {
     public static final int BY_DATE = 1;
     public static final int BY_LOWEST = 2;
     public static final int BY_HIGHTEST = 3;
-    public static final int CAT_HEADER_HEIGHT = 30;
+    public static final int CAT_HEADER_HEIGHT = 70;
 
 
     //popup contants

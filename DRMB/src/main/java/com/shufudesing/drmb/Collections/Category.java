@@ -39,6 +39,11 @@ public class Category {
         return trans;
     }
 
+    public void resetCat(){
+        setSpent(0d);
+        trans = new ArrayList<Transaction>();
+    }
+
     public void addTransaction(Transaction t){
         trans.add(t);
     }

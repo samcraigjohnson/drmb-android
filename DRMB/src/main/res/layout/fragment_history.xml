@@ -1,20 +1,63 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom="http://schemas.android.com/apk/res/com.shufudesing.drmb"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/history_linear"
     tools:context="com.shufudesing.drmb.Fragments.HistoryFragment">
 
     <com.shufudesing.drmb.Views.HistoryFilterView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="2"/>
+
+    <com.shufudesing.drmb.Views.HeaderView
+        android:id="@+id/fun_header"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        custom:header_text="F U N"
+        custom:view_position="1"
+        />
     <ListView
         android:id="@+id/transaction_list"
         android:layout_width="fill_parent"
         android:minHeight="20dp"
         android:layout_height="0dp"
-        android:layout_weight="10"
+        android:layout_weight="9"
+        />
+    <com.shufudesing.drmb.Views.HeaderView
+        android:id="@+id/food_header"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        custom:header_text="F O O D"
+        custom:view_position="2"
+        />
+    <com.shufudesing.drmb.Views.HeaderView
+        android:id="@+id/bills_header"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        custom:header_text="B I L L S"
+        custom:view_position="3"
+        />
+    <com.shufudesing.drmb.Views.HeaderView
+        android:id="@+id/home_header"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        custom:header_text="H O M E"
+        custom:view_position="4"
+        />
+    <com.shufudesing.drmb.Views.HeaderView
+        android:id="@+id/transit_header"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        custom:header_text="T R A N S I T"
+        custom:view_position="5"
         />
 
 
