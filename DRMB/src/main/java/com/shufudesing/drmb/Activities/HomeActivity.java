@@ -2,6 +2,7 @@ package com.shufudesing.drmb.Activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -22,6 +23,7 @@ import android.widget.ListView;
 
 import com.shufudesing.drmb.DrDDPManager;
 import com.shufudesing.drmb.DrUTILS;
+import com.shufudesing.drmb.Drawables.PolyDrawable;
 import com.shufudesing.drmb.Fragments.BaseDrFragment;
 import com.shufudesing.drmb.Fragments.BasePopupFragment;
 import com.shufudesing.drmb.Fragments.HistoryFragment;
@@ -45,7 +47,7 @@ public class HomeActivity extends ActionBarActivity {
     private final String TAG = "Home Activity";
     private BaseDrFragment[] fragments;
     private Fragment currentFragment;
-    private int currPos;
+    private int currPos, oldPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,8 @@ public class HomeActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, fragments[DrUTILS.OVERVIEW])
+                    .add(R.id.container, fragments[DrUTILS.OVERVIEW], DrUTILS.DRAWER_ITEMS[DrUTILS.OVERVIEW])
+                    .addToBackStack(DrUTILS.DRAWER_ITEMS[DrUTILS.OVERVIEW])
                     .commit();
             currentFragment = fragments[DrUTILS.OVERVIEW];
             currPos = DrUTILS.OVERVIEW;
@@ -90,7 +93,7 @@ public class HomeActivity extends ActionBarActivity {
         };
 
         mDrawer.setDrawerListener(mToggle);
-
+        getActionBar().setTitle("");
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setBackgroundDrawable(new ColorDrawable(DrUTILS.RED));
@@ -167,62 +170,78 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void removeAll(){
+        for(String tag: DrUTILS.DRAWER_ITEMS){
+            Fragment f = getFragmentManager().findFragmentByTag(tag);
+            if(f != null){
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Log.v(TAG, "removing : " + tag);
+                ft.remove(f).commit();
+            }
+        }
+    }
 
     public void selectItem(int pos){
         if(pos != currPos) {
+            oldPos = Integer.valueOf(currPos);
             currPos = pos;
-            Log.v(TAG, "pos: " + pos);
             Fragment fragment = null;
             String title = "";
             FragmentManager fManager = getFragmentManager();
-            Log.v(TAG, "Starting Fragment Exchange");
 
             if (pos == DrUTILS.OVERVIEW) {
-                Log.v(TAG, "ADDING OVERVIEW FRAGMENT");
-                fragment = fragments[DrUTILS.OVERVIEW];
                 //fManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                removeAll();
+                fragment = fragments[DrUTILS.OVERVIEW];
+                FragmentTransaction ft = fManager.beginTransaction();
 
-                fManager.beginTransaction().remove(currentFragment).commit();
-                fManager.beginTransaction()
-                        .add(R.id.container, fragment, fragment.getTag())
+                Log.v(TAG, "Adding overview back");
+                ft.add(R.id.container, fragment, DrUTILS.DRAWER_ITEMS[DrUTILS.OVERVIEW])
+                        .addToBackStack(DrUTILS.DRAWER_ITEMS[DrUTILS.OVERVIEW])
                         .commit();
             }
             else if (pos == DrUTILS.HISTORY_POS) {
-                    Log.v(TAG, "ADDING HISTORY FRAGMENT");
-                    fragment = fragments[DrUTILS.HISTORY_POS];
-                    title = "History";
-                    String tag = fragment.getTag();
-                    fManager.beginTransaction().remove(currentFragment).commit();
-                    fManager.beginTransaction()
-                            .add(R.id.container, fragment, tag)
-                            .addToBackStack(tag)
-                            .commit();
+                removeAll();
+                fragment = fragments[DrUTILS.HISTORY_POS];
+
+                fManager.beginTransaction()
+                        .add(R.id.container, fragment, DrUTILS.DRAWER_ITEMS[DrUTILS.HISTORY_POS])
+                        .addToBackStack(DrUTILS.DRAWER_ITEMS[DrUTILS.HISTORY_POS])
+                        .commit();
                 }
             else if (pos == DrUTILS.SETTINGS) {
                 }
             else if (pos == DrUTILS.TIPS) {
                 }
             else if (pos == DrUTILS.OUTLOOK) {
-                    Log.v(TAG, "ADDING OUTLOOK FRAGMENT");
                     fragment = fragments[DrUTILS.OUTLOOK];
                     fManager.beginTransaction()
-                            .add(R.id.container, fragment, fragment.getTag())
+                            .add(R.id.container, fragment, DrUTILS.DRAWER_ITEMS[DrUTILS.OUTLOOK])
+                            .addToBackStack(DrUTILS.DRAWER_ITEMS[DrUTILS.OUTLOOK])
                             .commit();
                 }
-                // else if (pos == DrUTILS.SAVED_LOCATIONS) {}
+
             currentFragment = fragment;
             getActionBar().setTitle(title);
             mDrawerList.setItemChecked(pos, true);
         }
-        Log.v(TAG, "DOne ADDING FRAGMENT");
+        Log.v(TAG, "Done ADDING FRAGMENT");
         mDrawer.closeDrawer(mDrawerList);
     }
 
     @Override
     public void onBackPressed(){
         FragmentManager fm = getFragmentManager();
-        if(fm.getBackStackEntryCount() > 0){
-            selectItem(DrUTILS.OVERVIEW);
+        if(fm.getBackStackEntryCount() > 0 && currPos != DrUTILS.OVERVIEW){
+            if(currPos == DrUTILS.OUTLOOK){
+                fm.popBackStackImmediate();
+                currPos = Integer.valueOf(oldPos);
+                //Fragment f = fm.findFragmentByTag(DrUTILS.DRAWER_ITEMS[DrUTILS.OUTLOOK]);
+                //fm.beginTransaction().remove(f).commit();
+            }
+            else {
+                selectItem(DrUTILS.OVERVIEW);
+            }
         }
         else{
             super.onBackPressed();

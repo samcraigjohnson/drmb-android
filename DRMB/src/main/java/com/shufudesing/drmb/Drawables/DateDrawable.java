@@ -24,7 +24,7 @@ public class DateDrawable extends Drawable{
 
     private RectF oval;
     private int sx,sy,ex,ey;
-    private int tx, ty;
+    private int tx, ty, endx, endy;
     private String time, text;
     private final Paint paint;
     private final Paint textPaint;
@@ -108,22 +108,30 @@ public class DateDrawable extends Drawable{
     private void updateText(double angle){
         if(angle < 0){
             tx = (int) oval.right;
+            endx = tx-20;
             ty = (int) oval.top;
+            endy = ty + 10;
             textPaint.setTextAlign(Paint.Align.LEFT);
         }
         else if(angle < 90){
             tx = (int) oval.right;
+            endx = tx-20;
             ty = (int) oval.bottom;
+            endy = ty - 25;
             textPaint.setTextAlign(Paint.Align.LEFT);
         }
         else if(angle < 180){
-            tx = (int) oval.left;
+            tx = (int) oval.left-25;
+            endx = tx+20;
             ty = (int) oval.bottom;
-            textPaint.setTextAlign(Paint.Align.RIGHT);
+            endy = ty - 25;
+            textPaint.setTextAlign(Paint.Align.LEFT);
         }
         else {
             tx = (int) oval.left;
+            endx = tx+20;
             ty = (int) oval.top;
+            endy = ty + 10;
             textPaint.setTextAlign(Paint.Align.CENTER);
         }
     }
@@ -133,7 +141,7 @@ public class DateDrawable extends Drawable{
         Path p  = new Path();
         p.moveTo(sx,sy);
         p.lineTo(ex,ey);
-        p.lineTo(tx-30,ty);
+        p.lineTo(endx,endy);
         canvas.drawPath(p, paint);
         canvas.drawText(text, tx, ty, textPaint);
     }
