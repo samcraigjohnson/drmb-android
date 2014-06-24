@@ -19,7 +19,7 @@ public class BasePopupView extends View{
 
     private ShapeDrawable popRect;
     private final Paint linePaint;
-    private int leftX, topY, rightX, bottomY;
+    protected int leftX, topY, rightX, bottomY;
 
     public BasePopupView(Context context) {
         super(context);
@@ -39,7 +39,7 @@ public class BasePopupView extends View{
         init();
     }
 
-    private void init(){
+    protected void init(){
         this.setBackgroundColor(Color.TRANSPARENT);
         popRect = new ShapeDrawable(new RectShape());
         DisplayMetrics screen = getContext().getResources().getDisplayMetrics();
@@ -50,7 +50,7 @@ public class BasePopupView extends View{
 
         popRect.setBounds(leftX, topY, rightX, bottomY);
         popRect.getPaint().setColor(Color.WHITE);
-        popRect.getPaint().setAlpha(50);
+        popRect.getPaint().setAlpha(240);
 
         linePaint.setColor(DrUTILS.GRAY);
         linePaint.setStrokeWidth(5f);

@@ -27,6 +27,7 @@ import com.shufudesing.drmb.Drawables.PolyDrawable;
 import com.shufudesing.drmb.Fragments.BaseDrFragment;
 import com.shufudesing.drmb.Fragments.BasePopupFragment;
 import com.shufudesing.drmb.Fragments.HistoryFragment;
+import com.shufudesing.drmb.Fragments.OutlookFragment;
 import com.shufudesing.drmb.Listeners.DrawerItemClickListener;
 import com.shufudesing.drmb.Fragments.OverallViewFragment;
 import com.shufudesing.drmb.MyDDP;
@@ -58,7 +59,7 @@ public class HomeActivity extends ActionBarActivity {
         fragments = new BaseDrFragment[DrUTILS.DRAWER_ITEMS.length];
         BaseDrFragment mainFragment = new OverallViewFragment();
         BaseDrFragment historyFragment = new HistoryFragment();
-        BaseDrFragment outlook = new BasePopupFragment();
+        BaseDrFragment outlook = new OutlookFragment();
         fragments[DrUTILS.OVERVIEW] = mainFragment;
         fragments[DrUTILS.HISTORY_POS] = historyFragment;
         fragments[DrUTILS.OUTLOOK] = outlook;

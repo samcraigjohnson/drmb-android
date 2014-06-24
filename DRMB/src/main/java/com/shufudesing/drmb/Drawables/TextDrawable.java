@@ -68,10 +68,20 @@ public class TextDrawable extends Drawable{
 
     @Override
     public void draw(Canvas canvas) {
-        if(x == -1)
-            canvas.drawText(text,canvas.getWidth()/2,y,paint);
-        else
-            canvas.drawText(text,x,y,paint);
+        String[] lines = new String[1];
+        lines[0] = text;
+        if (text.contains("\n")) {
+            lines = text.split("\\n?\\n");
+        }
+        if (x == -1) {
+            for (int i = 0; i<lines.length;i++) {
+                canvas.drawText(lines[i], canvas.getWidth() / 2, y+(i*(paint.getTextSize())), paint);
+            }
+        } else {
+            for(int i = 0; i<lines.length;i++) {
+                canvas.drawText(lines[i], x, y+(i*(paint.getTextSize())), paint);
+            }
+        }
     }
 
     public void correctWidth(int desiredWidth){

@@ -20,6 +20,8 @@ public class DrUTILS {
     public static final int SCREEN_OFFSET = 800;
     public static final int CIRCLE_OFFSET = 100 + CIRCLE_SIZE + RING_SIZE;
 
+    public static final float ALT_MONEY_TEXT_SIZE = 90f;
+
     //savings view constants
     public static final int SAVINGS_BAR_SIZE = 225;
     public static final float SAVINGS_TEXT_SIZE = 45f;
